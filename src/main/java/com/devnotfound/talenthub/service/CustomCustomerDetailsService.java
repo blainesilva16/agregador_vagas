@@ -1,7 +1,5 @@
 package com.devnotfound.talenthub.service;
 
-import com.devnotfound.talenthub.entity.Customer;
-import com.devnotfound.talenthub.repository.CustomerRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
