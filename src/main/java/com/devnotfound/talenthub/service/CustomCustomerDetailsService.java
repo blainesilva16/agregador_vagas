@@ -1,5 +1,7 @@
 package com.devnotfound.talenthub.service;
 
+import com.devnotfound.talenthub.entity.Customer;
+import com.devnotfound.talenthub.repository.CustomerRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,12 +17,12 @@ public class CustomCustomerDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Customer cliente = customerRepository.findByUsername(username);
+        Customer cliente = customerRepository.findByEmail(username);
         if (cliente == null) {
             throw new UsernameNotFoundException("Cliente não encontrado: " + username);
         }
         return org.springframework.security.core.userdetails.User.builder()
-                .username(cliente.getUsername())
+                .username(cliente.getEmail())
                 .password(cliente.getPassword())
 //                .roles("CUSTOMER")
                 .build();
