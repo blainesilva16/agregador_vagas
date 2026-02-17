@@ -27,6 +27,14 @@ public class CustomerController {
     public String loginCustomer() {
         return "customer/login";
     }
+}
+
+@RestController
+@RequestMapping("/api/customer")
+@RequiredArgsConstructor
+class CustomerRestController {
+    
+    private final CustomerService customerService;
     
     @GetMapping("/email/{email}")
     public ResponseEntity<CustomerResponseDTO> findByEmail(@PathVariable String email) {

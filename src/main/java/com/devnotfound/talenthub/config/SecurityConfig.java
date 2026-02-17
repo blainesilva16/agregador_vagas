@@ -24,9 +24,11 @@ public class SecurityConfig {
     public SecurityFilterChain userSecurity(HttpSecurity http,
                                              CustomUserDetailsService userDetailsService) throws Exception {
         http.securityMatcher("/user/**")
-                .authorizeHttpRequests(auth -> auth.anyRequest().hasRole("USER"))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/user/login-user").permitAll()
+                        .anyRequest().hasRole("USER"))
                 .formLogin(login -> login
-                        .loginPage("/login-user")
+                        .loginPage("/user/login-user")
                         .defaultSuccessUrl("/user/home", true)
                         .permitAll())
                 .userDetailsService(userDetailsService);
@@ -40,12 +42,25 @@ public class SecurityConfig {
     public SecurityFilterChain customerSecurity(HttpSecurity http,
                                                 CustomCustomerDetailsService customerDetailsService) throws Exception {
         http.securityMatcher("/customer/**")
-                .authorizeHttpRequests(auth -> auth.anyRequest().hasRole("CUSTOMER"))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/customer/login-customer").permitAll()
+                        .anyRequest().hasRole("CUSTOMER"))
                 .formLogin(login -> login
-                        .loginPage("/login-customer")
+                        .loginPage("/customer/login-customer")
                         .defaultSuccessUrl("/customer/home", true)
                         .permitAll())
                 .userDetailsService(customerDetailsService);
+
+        return http.build();
+    }
+
+    // Configuração para API REST (sem autenticação)
+    @Bean
+    @Order(3)
+    public SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+        http.securityMatcher("/api/**")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         return http.build();
     }

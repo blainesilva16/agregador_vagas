@@ -27,6 +27,14 @@ public class UserController {
     public String loginUser() {
         return "user/login";
     }
+}
+
+@RestController
+@RequestMapping("/api/user")
+@RequiredArgsConstructor
+class UserRestController {
+    
+    private final UserService userService;
     
     @GetMapping("/email/{email}")
     public ResponseEntity<UserResponseDTO> findByEmail(@PathVariable String email) {
@@ -68,5 +76,11 @@ public class UserController {
     public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody String newPassword) {
         userService.updatePassword(id, newPassword);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{email}/resetpass")
+    public ResponseEntity<String> resetPassword(@PathVariable String email) {
+        String newPassword = userService.resetPassword(email);
+        return ResponseEntity.ok(newPassword);
     }
 }
