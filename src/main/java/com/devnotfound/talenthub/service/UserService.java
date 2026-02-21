@@ -9,7 +9,6 @@ import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.UserMapper;
 import com.devnotfound.talenthub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email);
@@ -57,7 +55,6 @@ public class UserService {
             throw new DuplicateEmailException("Email já cadastrado: " + dto.email());
         }
         User user = UserMapper.toEntity(dto);
-        user.setPassword(passwordEncoder.encode(dto.password()));
         User saved = userRepository.save(user);
         return UserMapper.toResponseDTO(saved);
     }
@@ -88,7 +85,7 @@ public class UserService {
     public void updatePassword(Integer id, String newPassword) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o id: " + id));
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(newPassword);
         userRepository.save(user);
     }
 
@@ -98,7 +95,7 @@ public class UserService {
             throw new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_EMAIL + email);
         }
         String newPassword = SystemConstants.DEFAULT_BACKOFFICE_PASSWORD;
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(newPassword);
         userRepository.save(user);
         return newPassword;
     }
