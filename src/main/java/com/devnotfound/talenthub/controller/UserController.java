@@ -6,27 +6,16 @@ import com.devnotfound.talenthub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/user")
+@RestController
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
     
     private final UserService userService;
-    
-    @GetMapping("/home")
-    public String homeUser() {
-        return "user/home";
-    }
-
-    @GetMapping("/login-user")
-    public String loginUser() {
-        return "user/login";
-    }
     
     @GetMapping("/email/{email}")
     public ResponseEntity<UserResponseDTO> findByEmail(@PathVariable String email) {
@@ -38,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
     
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
@@ -68,5 +57,11 @@ public class UserController {
     public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody String newPassword) {
         userService.updatePassword(id, newPassword);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{email}/resetpass")
+    public ResponseEntity<String> resetPassword(@PathVariable String email) {
+        String newPassword = userService.resetPassword(email);
+        return ResponseEntity.ok(newPassword);
     }
 }
