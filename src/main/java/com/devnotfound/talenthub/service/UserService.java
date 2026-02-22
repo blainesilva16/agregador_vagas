@@ -99,4 +99,9 @@ public class UserService {
         userRepository.save(user);
         return newPassword;
     }
+
+    public boolean authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        return user != null && user.getPassword().equals(password);
+    }
 }
