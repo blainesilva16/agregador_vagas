@@ -1,11 +1,18 @@
 # Talent Hub
-Projeto de um sistema de Agregador de Vagas feito em grupo, onde o objetivo é buscar vagas em vários sites,
+Projeto de um sistema Agregador de Vagas, feito em grupo, onde o objetivo é buscar vagas em vários sites,
 através de crawler ou consumo de api.
+
+Sendo um centralizador, afim de que as pessoas que estejam buscando vagas, possam ter acesso a elas, num único lugar
+e também marcar suas vagas favoritas, para posterior contato.
+
+O sistema conta ainda com um backoffice para configuração da parte site.
 
 Esse projeto é composto das seguintes tecnologias:
 
     - Java 17
     - Springboot 3.2.0
+    - Spring data jpa
+    - Spring security
     - JWT 4.4.0
     - Python
     - Mysql
@@ -14,6 +21,8 @@ Esse projeto é composto das seguintes tecnologias:
     - Html
     - CSS
     - Quality Assurance
+
+Essa api foi dockerizada e está hospedada na AWS com EC2 e a esteira do CI/CD é feita pela branch main, com o github actions.
 
 O grupo foi dividido em frontend, backend, devops, dbas e analistas de qualidade, sendo que o frontend está em outro repositório, bem como a parte de python.
 
@@ -25,7 +34,11 @@ Da parte de java, os desenvolvedores envolvidos são:
     - Guilherme Leal
     - Nathan
 
-Essa api foi dockerizada e está hospedada na AWS com EC2 e a esteira do CI/CD é feita pela branch main, com o github actions.
+Da parte de python, os desenvolvedores envolvidos são:
+
+    - Blaine
+    - Carlos Henrique
+    - Henrique
 
 Da parte de banco de dados, os envolvidos são:
 
