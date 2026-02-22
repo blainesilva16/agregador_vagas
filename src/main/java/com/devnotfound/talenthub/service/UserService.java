@@ -9,6 +9,7 @@ import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.UserMapper;
 import com.devnotfound.talenthub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,18 +19,19 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new ResourceNotFoundException("Usuário não encontrado com o email: " + email);
+            throw new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_EMAIL + email);
         }
         return UserMapper.toResponseDTO(user);
     }
 
     public UserResponseDTO findById(Integer id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_ID + id));
         return UserMapper.toResponseDTO(user);
     }
 
@@ -44,7 +46,7 @@ public class UserService {
                 .map(UserMapper::toResponseDTO)
                 .toList();
         if (users.isEmpty()) {
-            throw new ResourceNotFoundException("Nenhum usuário encontrado com o nome: " + name);
+            throw new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_NAME + name);
         }
         return users;
     }
@@ -52,40 +54,40 @@ public class UserService {
     public UserResponseDTO insert(UserRequestDTO dto) {
         User existingUser = userRepository.findByEmail(dto.email());
         if (existingUser != null) {
-            throw new DuplicateEmailException("Email já cadastrado: " + dto.email());
+            throw new DuplicateEmailException(SystemConstants.EMAIL_ALREADY_EXISTS + dto.email());
         }
         User user = UserMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(dto.password()));
         User saved = userRepository.save(user);
         return UserMapper.toResponseDTO(saved);
     }
 
     public UserResponseDTO update(Integer id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_ID + id));
         
         User existingUser = userRepository.findByEmail(dto.email());
         if (existingUser != null && !existingUser.getId().equals(id)) {
-            throw new DuplicateEmailException("Email já cadastrado: " + dto.email());
+            throw new DuplicateEmailException(SystemConstants.EMAIL_ALREADY_EXISTS + dto.email());
         }
         
         user.setName(dto.name());
         user.setEmail(dto.email());
-//        user.setPassword(dto.password());
         User updated = userRepository.save(user);
         return UserMapper.toResponseDTO(updated);
     }
 
     public void delete(Integer id) {
         if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Usuário não encontrado com o id: " + id);
+            throw new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_ID + id);
         }
         userRepository.deleteById(id);
     }
 
     public void updatePassword(Integer id, String newPassword) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o id: " + id));
-        user.setPassword(newPassword);
+                .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_ID + id));
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 
@@ -95,13 +97,13 @@ public class UserService {
             throw new ResourceNotFoundException(SystemConstants.USER_NOT_FOUND_EMAIL + email);
         }
         String newPassword = SystemConstants.DEFAULT_BACKOFFICE_PASSWORD;
-        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return newPassword;
     }
 
     public boolean authenticate(String email, String password) {
         User user = userRepository.findByEmail(email);
-        return user != null && user.getPassword().equals(password);
+        return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 }
