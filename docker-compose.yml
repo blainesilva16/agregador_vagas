@@ -5,7 +5,7 @@ services:
       - "3306:3306"
     expose:
       - "3306"
-    enviroment:
+    environment:
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=123
       - MYSQL_DATABASE=talenthub
