@@ -22,8 +22,7 @@ public class PositionController {
     public ResponseEntity<PositionResponseDTO> create(@RequestBody PositionRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(positionService.insert(dto));
     }
-
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<PositionResponseDTO> update(@PathVariable Integer id, @RequestBody PositionRequestDTO dto) {
         return ResponseEntity.ok(positionService.update(id, dto));
     }
