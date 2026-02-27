@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
@@ -21,6 +19,7 @@ public class TokenService {
     @Value("${spring.secret}")
     private String secret;
 
+    /** minutos */
     @Value("${spring.expiration}")
     private long expiration;
 
@@ -31,13 +30,14 @@ public class TokenService {
     private TokenRepository tokenRepository;
 
     @Transactional
-    public String gerarToken(String subject) {
-        var dataExpiracao = this.getDataExpiracao();
+    public String gerarToken(String subject, String role) {
+        Instant dataExpiracao = getDataExpiracao();
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
         String token = JWT.create()
                 .withIssuer(emissor)
                 .withSubject(subject)
+                .withClaim("role", role)
                 .withExpiresAt(dataExpiracao)
                 .sign(algorithm);
 
@@ -54,11 +54,11 @@ public class TokenService {
         }
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
-        com.auth0.jwt.JWTVerifier verifier = JWT.require(algorithm).withIssuer(emissor).build();
+        var verifier = JWT.require(algorithm).withIssuer(emissor).build();
         return verifier.verify(token);
     }
 
     private Instant getDataExpiracao() {
-        return LocalDateTime.now().plusMinutes(expiration).toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now().plusSeconds(expiration * 60);
     }
 }
