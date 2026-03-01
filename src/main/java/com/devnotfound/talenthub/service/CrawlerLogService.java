@@ -1,6 +1,9 @@
 package com.devnotfound.talenthub.service;
 
+import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
+import com.devnotfound.talenthub.dto.CrawlerLogResponseDTO;
 import com.devnotfound.talenthub.entity.CrawlerLog;
+import com.devnotfound.talenthub.mapper.CrawlerLogMapper;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.specification.CrawlerLogSpecification;
 
@@ -21,21 +24,22 @@ public class CrawlerLogService {
         this.repository = repository;
     }
 
-    public Page<CrawlerLog> search(
-            String plataform,
-            Integer positionId,
-            Integer techId,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            Pageable pageable
-    ) { //findAll(Spec spec, Pageable pageable)
-        return repository.findAll(CrawlerLogSpecification.filter(
-                plataform,
-                positionId,
-                techId,
-                startDate,
-                endDate
-        ), pageable);
+    public Page<CrawlerLogResponseDTO> search(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
+        //findAll(Spec spec, Pageable pageable)
+        Page<CrawlerLog> page =
+                repository.findAll(
+                        CrawlerLogSpecification.filter(
+                                filterDTO), pageable);
+
+        return page.map(CrawlerLogMapper::toResponseDTO);
+    }
+
+    public Page<CrawlerLogResponseDTO> findByPosition_Id(Integer id, Pageable pageable) {
+
+        Page<CrawlerLog> page =
+                repository.findByPosition_Id(id, pageable);
+
+        return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
     public List<String> findDistinctPlataforms() {
