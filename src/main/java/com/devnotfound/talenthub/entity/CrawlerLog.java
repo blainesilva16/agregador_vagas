@@ -22,9 +22,9 @@ public class CrawlerLog {
     @JoinColumn(name = "tech_id")
     private Tech tech;
 
-    @ManyToOne
-    @JoinColumn(name = "position_id")
-    private Position position;
+//    @ManyToOne
+//    @JoinColumn(name = "position_id")
+//    private Position position;
 
     @Column(name = "city_name", length = 100)
     private String cityName;
@@ -104,13 +104,13 @@ public class CrawlerLog {
         this.tech = tech;
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
+//    public Position getPosition() {
+//        return position;
+//    }
+//
+//    public void setPosition(Position position) {
+//        this.position = position;
+//    }
 
     public String getCityName() {
         return cityName;
