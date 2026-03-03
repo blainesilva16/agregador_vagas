@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.devnotfound.talenthub.service;
 
 import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
@@ -46,3 +47,5 @@ public class CrawlerLogService {
         return repository.findDistinctPlataforms();
     }
 }
+=======
+>>>>>>> d93066a (feat: excecao positionId tratada e expondo endpoints consulta de vaga)

@@ -14,9 +14,13 @@ public class SystemConstants {
     public static final String CUSTOMER_NOT_FOUND_EMAIL = "Customer not found with email: ";
     public static final String CUSTOMER_NOT_FOUND_NAME = "Nenhum cliente encontrado com o nome: ";
     public static final String EMAIL_ALREADY_EXISTS = "Email já cadastrado: ";
+<<<<<<< HEAD
     public static final String TECH_NOT_FOUND_ID = "Tech não encontrada com id: ";
     public static final String TECH_ALREADY_EXISTS = "Já existe uma tecnologia com esse nome.";
 
+=======
+    public static final String JOB_NOT_FOUND_BY_POSITION = "Nenhuma vaga encontrada de posicao: ";
+>>>>>>> d93066a (feat: excecao positionId tratada e expondo endpoints consulta de vaga)
 
     // Configurações
     public static final String DEFAULT_BACKOFFICE_PASSWORD = "Senha!23";

@@ -8,10 +8,7 @@ import com.devnotfound.talenthub.service.CrawlerLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +37,7 @@ public class CrawlerLogController {
         return service.findDistinctPlataforms();
     }
 
+<<<<<<< HEAD
 //    @GetMapping("/positions/{id}")
 //    public Page<CrawlerLogResponseDTO> findByPositionId(
 //            @RequestParam Integer id,
@@ -47,4 +45,13 @@ public class CrawlerLogController {
 //    ) {
 //        return service.findByPosition_Id(id, pageable);
 //    }
+=======
+    @GetMapping("/positions/{id}")
+    public Page<CrawlerLogResponseDTO> findByPositionId(
+            @PathVariable Integer id,
+            Pageable pageable
+    ) {
+        return service.findByPositionId(id, pageable);
+    }
+>>>>>>> d93066a (feat: excecao positionId tratada e expondo endpoints consulta de vaga)
 }
