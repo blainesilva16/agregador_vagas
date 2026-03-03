@@ -42,7 +42,7 @@ public class PositionService {
     }
 
     public PositionResponseDTO insert(PositionRequestDTO dto) {
-        List<Position> existingPosition = positionRepository.findByNameContainingIgnoreCase(dto.name());
+        Position existingPosition = positionRepository.findByName(dto.name());
         if (existingPosition != null) {
             throw new DuplicatePositionNameException(SystemConstants.POSITION_ALREADY_EXISTS + dto.name());
         }
