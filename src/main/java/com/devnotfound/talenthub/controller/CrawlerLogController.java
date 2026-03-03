@@ -1,5 +1,7 @@
 package com.devnotfound.talenthub.controller;
 
+import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
+import com.devnotfound.talenthub.dto.CrawlerLogResponseDTO;
 import com.devnotfound.talenthub.entity.CrawlerLog;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.service.CrawlerLogService;
@@ -21,26 +23,28 @@ public class CrawlerLogController {
 
     private final CrawlerLogService service;
 
+    //metodo de listagem/busca com filtro e paginação.
     @GetMapping
-    public Page<CrawlerLog> search(
-            @RequestParam(required = false) String plataform,
-            @RequestParam(required = false) Integer positionId,
-            @RequestParam(required = false) Integer techId,
-            @RequestParam(required = false) LocalDateTime startDate,
-            @RequestParam(required = false) LocalDateTime endDate,
+    public Page<CrawlerLogResponseDTO> search(
+            CrawlerLogFilterDTO filterDTO,
             Pageable pageable
     ) {
         return service.search(
-                plataform,
-                positionId,
-                techId,
-                startDate,
-                endDate,
+                filterDTO,
                 pageable);
     }
 
+    //endpoint REST q retorna uma lista de valores únicos do campo plataform
     @GetMapping("/plataforms")
     public List<String> getPlataforms() {
         return service.findDistinctPlataforms();
     }
+
+//    @GetMapping("/positions/{id}")
+//    public Page<CrawlerLogResponseDTO> findByPositionId(
+//            @RequestParam Integer id,
+//            Pageable pageable
+//    ) {
+//        return service.findByPosition_Id(id, pageable);
+//    }
 }

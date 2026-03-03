@@ -1,5 +1,6 @@
 package com.devnotfound.talenthub.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record CrawlerLogFilterDTO(
@@ -7,5 +8,11 @@ public record CrawlerLogFilterDTO(
    Integer positionId,
    Integer techId,
    LocalDateTime startDate,
-   LocalDateTime endDate
+   LocalDateTime endDate,
+   String ufAbrev,
+   String cityName,
+   String hiringType,
+   String techLevel,
+   BigDecimal salaryMin,
+   BigDecimal salaryMax
 ) {}
