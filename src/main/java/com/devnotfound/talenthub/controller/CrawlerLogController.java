@@ -40,11 +40,11 @@ public class CrawlerLogController {
         return service.findDistinctPlataforms();
     }
 
-    @GetMapping("/positions/{id}")
-    public Page<CrawlerLogResponseDTO> findByPositionId(
-            @RequestParam Integer id,
-            Pageable pageable
-    ) {
-        return service.findByPosition_Id(id, pageable);
-    }
+//    @GetMapping("/positions/{id}")
+//    public Page<CrawlerLogResponseDTO> findByPositionId(
+//            @RequestParam Integer id,
+//            Pageable pageable
+//    ) {
+//        return service.findByPosition_Id(id, pageable);
+//    }
 }

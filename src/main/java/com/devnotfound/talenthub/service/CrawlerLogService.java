@@ -34,13 +34,13 @@ public class CrawlerLogService {
         return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
-    public Page<CrawlerLogResponseDTO> findByPosition_Id(Integer id, Pageable pageable) {
-
-        Page<CrawlerLog> page =
-                repository.findByPosition_Id(id, pageable);
-
-        return page.map(CrawlerLogMapper::toResponseDTO);
-    }
+//    public Page<CrawlerLogResponseDTO> findByPosition_Id(Integer id, Pageable pageable) {
+//
+//        Page<CrawlerLog> page =
+//                repository.findByPosition_Id(id, pageable);
+//
+//        return page.map(CrawlerLogMapper::toResponseDTO);
+//    }
 
     public List<String> findDistinctPlataforms() {
         return repository.findDistinctPlataforms();
