@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Integer> {
     // Você só precisa de busca por nome para os cargos
+    Position findByName(String name);
     List<Position> findByNameContainingIgnoreCase(String name);
 }

@@ -2,7 +2,6 @@ package com.devnotfound.talenthub.controller;
 
 import com.devnotfound.talenthub.dto.PositionRequestDTO;
 import com.devnotfound.talenthub.dto.PositionResponseDTO;
-import com.devnotfound.talenthub.dto.UserRequestDTO;
 import com.devnotfound.talenthub.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +20,11 @@ public class PositionController {
     @PostMapping
     public ResponseEntity<PositionResponseDTO> create(@RequestBody PositionRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(positionService.insert(dto));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PositionResponseDTO>> findByName(@RequestParam String name) {
+        return ResponseEntity.ok(positionService.findByName(name));
     }
     @PutMapping("/{id}")
     public ResponseEntity<PositionResponseDTO> update(@PathVariable Integer id, @RequestBody PositionRequestDTO dto) {
