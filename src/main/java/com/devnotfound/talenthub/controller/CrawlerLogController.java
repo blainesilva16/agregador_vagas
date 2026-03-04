@@ -20,6 +20,16 @@ public class CrawlerLogController {
 
     private final CrawlerLogService service;
 
+    @GetMapping("/public")
+    public Page<CrawlerLogResponseDTO> publicSearch(Pageable pageable) {
+        return service.findAllLogsUnlogged(pageable);
+    }
+
+    @GetMapping("/private")
+    public Page<CrawlerLogResponseDTO> privateSearch(Pageable pageable) {
+        return service.findAllLogsLogged(pageable);
+    }
+
     //metodo de listagem/busca com filtro e paginação.
     @GetMapping
     public Page<CrawlerLogResponseDTO> search(
@@ -37,21 +47,11 @@ public class CrawlerLogController {
         return service.findDistinctPlataforms();
     }
 
-<<<<<<< HEAD
-//    @GetMapping("/positions/{id}")
-//    public Page<CrawlerLogResponseDTO> findByPositionId(
-//            @RequestParam Integer id,
-//            Pageable pageable
-//    ) {
-//        return service.findByPosition_Id(id, pageable);
-//    }
-=======
-    @GetMapping("/positions/{id}")
+    /*@GetMapping("/positions/{id}")
     public Page<CrawlerLogResponseDTO> findByPositionId(
             @PathVariable Integer id,
             Pageable pageable
     ) {
         return service.findByPositionId(id, pageable);
-    }
->>>>>>> d93066a (feat: excecao positionId tratada e expondo endpoints consulta de vaga)
+    }*/
 }

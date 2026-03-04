@@ -25,14 +25,9 @@ public class CrawlerLog {
     private Tech tech;
 
 <<<<<<< HEAD
-//    @ManyToOne
-//    @JoinColumn(name = "position_id")
-//    private Position position;
-=======
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;*/
->>>>>>> d93066a (feat: excecao positionId tratada e expondo endpoints consulta de vaga)
 
     @Column(name = "city_name", length = 100)
     private String cityName;

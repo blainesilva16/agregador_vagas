@@ -1,9 +1,10 @@
-<<<<<<< HEAD
 package com.devnotfound.talenthub.service;
 
+import com.devnotfound.talenthub.constants.SystemConstants;
 import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
 import com.devnotfound.talenthub.dto.CrawlerLogResponseDTO;
 import com.devnotfound.talenthub.entity.CrawlerLog;
+import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.CrawlerLogMapper;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.specification.CrawlerLogSpecification;
@@ -20,9 +21,27 @@ import java.util.List;
 public class CrawlerLogService {
 
     private final CrawlerLogRepository repository;
+    //private final PostionRepository postionRepository;
 
-    public CrawlerLogService(CrawlerLogRepository repository) {
+    public CrawlerLogService(CrawlerLogRepository repository/*, PositionRepository positionRepository*/) {
         this.repository = repository;
+        //this.positionRepository = positionRepository;
+    }
+
+    //Cliente LOGADO
+    public Page<CrawlerLogResponseDTO> findAllLogsLogged(Pageable pageable) {
+
+        Page<CrawlerLog> page = repository.findAll(pageable);
+
+        return page.map(CrawlerLogMapper::toResponseDTO);
+    }
+
+    //Cliente DESLOGADO
+    public Page<CrawlerLogResponseDTO> findAllLogsUnlogged(Pageable pageable) {
+
+        Page<CrawlerLog> page = repository.findAll(pageable);
+
+        return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
     public Page<CrawlerLogResponseDTO> search(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
@@ -35,17 +54,21 @@ public class CrawlerLogService {
         return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
-//    public Page<CrawlerLogResponseDTO> findByPosition_Id(Integer id, Pageable pageable) {
-//
-//        Page<CrawlerLog> page =
-//                repository.findByPosition_Id(id, pageable);
-//
-//        return page.map(CrawlerLogMapper::toResponseDTO);
-//    }
+    /*public Page<CrawlerLogResponseDTO> findByPositionId(Integer id, Pageable pageable) {
+
+        if (!postionRepository.existsById(id)) {
+            return new ResourceNotFoundException(
+                    SystemConstants.JOB_NOT_FOUND_BY_POSITION + id
+            );
+        }
+
+        Page<CrawlerLog> page =
+                repository.findByPositionId(id, pageable);
+
+        return page.map(CrawlerLogMapper::toResponseDTO);
+      }*/
 
     public List<String> findDistinctPlataforms() {
         return repository.findDistinctPlataforms();
     }
 }
-=======
->>>>>>> d93066a (feat: excecao positionId tratada e expondo endpoints consulta de vaga)
