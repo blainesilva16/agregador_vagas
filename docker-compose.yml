@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=123
+      - MYSQL_DATABASE=talenthub
+      - MYSQL_ROOT_PASSWORD=123
+    command: >
+          --character-set-server=utf8mb4
+          --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d

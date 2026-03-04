@@ -14,6 +14,9 @@ public class SystemConstants {
     public static final String CUSTOMER_NOT_FOUND_EMAIL = "Customer not found with email: ";
     public static final String CUSTOMER_NOT_FOUND_NAME = "Nenhum cliente encontrado com o nome: ";
     public static final String EMAIL_ALREADY_EXISTS = "Email já cadastrado: ";
+    public static final String TECH_NOT_FOUND_ID = "Tech não encontrada com id: ";
+    public static final String TECH_ALREADY_EXISTS = "Já existe uma tecnologia com esse nome.";
+
 
     public static final String POSITION_NOT_FOUND_ID = "Cargo não encontrado com o id: ";
     public static final String POSITION_NOT_FOUND_NAME = "Nenhum cargo encontrado com o nome: ";
