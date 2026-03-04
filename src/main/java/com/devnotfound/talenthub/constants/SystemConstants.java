@@ -20,6 +20,11 @@ public class SystemConstants {
 
     public static final String JOB_NOT_FOUND_BY_POSITION = "Nenhuma vaga encontrada de posicao: ";
 
+    public static final String POSITION_NOT_FOUND_ID = "Cargo não encontrado com o id: ";
+    public static final String POSITION_NOT_FOUND_NAME = "Nenhum cargo encontrado com o nome: ";
+
+    public static final String POSITION_ALREADY_EXISTS = "Cargo já cadastrado: ";
+
     // Configurações
     public static final String DEFAULT_BACKOFFICE_PASSWORD = "Senha!23";
     public static final String DEFAULT_SITE_PASSWORD = "Cli!23";
