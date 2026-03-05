@@ -2,34 +2,44 @@ package com.devnotfound.talenthub.service;
 
 import com.devnotfound.talenthub.constants.SystemConstants;
 import com.devnotfound.talenthub.dto.TechRequestDTO;
+import com.devnotfound.talenthub.dto.TechResponseDTO;
 import com.devnotfound.talenthub.entity.Tech;
 import com.devnotfound.talenthub.exception.DuplicateNameException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
+import com.devnotfound.talenthub.mapper.TechMapper;
 import com.devnotfound.talenthub.repository.TechRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TechService {
 
     private final TechRepository techRepository;
+    private final TechMapper techMapper;
 
-    public TechService(TechRepository techRepository) {
+
+    public TechService(TechRepository techRepository, TechMapper techMapper) {
         this.techRepository = techRepository;
+        this.techMapper = techMapper;
     }
 
-    public List<Tech> listAll() {
-        return techRepository.findAll();
+    public List<TechResponseDTO> listAll() {
+        return techRepository.findAll().stream()
+                .map(techMapper::toResponseDTO) // O Java 8+ adora Method References!
+                .collect(Collectors.toList());
     }
 
-    public Tech findById(Integer id) {
-        return techRepository.findById(id)
+    public TechResponseDTO findById(Integer id) {
+        Tech tech = techRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(SystemConstants.TECH_NOT_FOUND_ID + id));
+
+        return techMapper.toResponseDTO(tech);
     }
 
-    public Tech create(TechRequestDTO dto) {
+    public TechResponseDTO create(TechRequestDTO dto) {
 
         if (techRepository.existsByNameIgnoreCase(dto.name())) {
             throw new DuplicateNameException(SystemConstants.TECH_ALREADY_EXISTS);
@@ -38,10 +48,12 @@ public class TechService {
         Tech tech = new Tech();
         tech.setName(dto.name());
 
-        return techRepository.save(tech);
+        Tech savedTech = techRepository.save(tech);
+
+        return techMapper.toResponseDTO(savedTech);
     }
 
-    public Tech update(Integer id, TechRequestDTO dto) {
+    public TechResponseDTO update(Integer id, TechRequestDTO dto) {
 
         Tech existingTech = techRepository.findById(id)
                 .orElseThrow(() ->
@@ -54,7 +66,9 @@ public class TechService {
 
         existingTech.setName(dto.name());
 
-        return techRepository.save(existingTech);
+        Tech updatedTech = techRepository.save(existingTech);
+
+        return techMapper.toResponseDTO(updatedTech);
     }
 
     public void delete(Integer id) {

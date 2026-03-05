@@ -3,8 +3,6 @@ package com.devnotfound.talenthub.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Table(name = "techs")
 @Data
