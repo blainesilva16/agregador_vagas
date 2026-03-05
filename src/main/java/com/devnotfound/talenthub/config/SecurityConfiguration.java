@@ -27,7 +27,7 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    } 
     
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -47,13 +47,9 @@ public class SecurityConfiguration {
                                 "/webjars/**"
                         		).permitAll()
 
-                        // auth atual do projeto
-                        .requestMatchers("/auth/gerarToken").permitAll()
-
-                        // CLIENTE (ajuste conforme seus endpoints reais)
                         .requestMatchers(HttpMethod.POST, "/api/clientes").permitAll() // cadastro
-                        .requestMatchers(HttpMethod.POST, "/api/clientes/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/clientes/reset-senha").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/clientes/resetpass").permitAll() // reset senha
+                        .requestMatchers("/auth/gerarToken").permitAll()
 
                         .anyRequest().authenticated()
                 )

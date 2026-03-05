@@ -1,7 +1,9 @@
 package com.devnotfound.talenthub.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record LoginRequestDTO(
-        String email,
-        String password,
-        String origem
+        @NotBlank String email,
+        @NotBlank String password,
+        @NotBlank String origem
 ) {}

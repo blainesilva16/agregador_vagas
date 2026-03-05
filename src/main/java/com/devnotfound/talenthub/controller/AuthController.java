@@ -2,7 +2,7 @@ package com.devnotfound.talenthub.controller;
 
 import com.devnotfound.talenthub.dto.LoginRequestDTO;
 import com.devnotfound.talenthub.dto.TokenResponseDTO;
-import com.devnotfound.talenthub.service.ClienteService;
+import com.devnotfound.talenthub.service.ClienteAuthService;
 import com.devnotfound.talenthub.service.TokenService;
 import com.devnotfound.talenthub.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,60 +21,37 @@ public class AuthController {
 
     private final TokenService tokenService;
     private final UserService userService;
-    private final ClienteService clienteService;
+    private final ClienteAuthService clienteAuthService;
 
     @PostMapping("/gerarToken")
-    @Operation(summary = "Gerar Token",
-            description = "Gera token de acesso à API para USER ou CUSTOMER")
-    public ResponseEntity<?> gerarToken(
-            @RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+    @Operation(summary = "Gerar Token", description = "Gera token de acesso à API para USER ou CLIENTE")
+    public ResponseEntity<?> gerarToken(@RequestBody @Valid LoginRequestDTO dto) {
 
+        String origem = dto.origem();
+
+        if (!"USER".equalsIgnoreCase(origem) && !"CLIENTE".equalsIgnoreCase(origem)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Origem inválida!");
+        }
+
+        boolean authenticated =
+                "USER".equalsIgnoreCase(origem)
+                        ? userService.authenticate(dto.email(), dto.password())
+                        : authenticateCliente(dto.email(), dto.password());
+
+        if (!authenticated) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas!");
+        }
+
+        String token = tokenService.gerarToken(dto.email(), origem.toUpperCase());
+        return ResponseEntity.ok(new TokenResponseDTO(token));
+    }
+
+    private boolean authenticateCliente(String email, String password) {
         try {
-
-            String origem = loginRequestDTO.origem();
-
-            if (origem == null || origem.isBlank()) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Origem inválida!");
-            }
-
-            boolean authenticated;
-
-            if ("USER".equalsIgnoreCase(origem)) {
-
-                authenticated = userService.authenticate(
-                        loginRequestDTO.email(),
-                        loginRequestDTO.password()
-                );
-
-            } else if ("CUSTOMER".equalsIgnoreCase(origem)) {
-
-                authenticated = clienteService.authenticate(
-                        loginRequestDTO.email(),
-                        loginRequestDTO.password()
-                );
-
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Origem inválida!");
-            }
-
-            if (!authenticated) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Credenciais inválidas!");
-            }
-
-            // Gera token com claim "role"
-            String token = tokenService.gerarToken(
-                    loginRequestDTO.email(),
-                    origem.toUpperCase()
-            );
-
-            return ResponseEntity.ok(new TokenResponseDTO(token));
-
+            clienteAuthService.authenticate(email, password); 
+            return true;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
+            return false;
         }
     }
 }

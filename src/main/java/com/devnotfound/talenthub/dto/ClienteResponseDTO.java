@@ -1,6 +1,7 @@
 package com.devnotfound.talenthub.dto;
 
 public record ClienteResponseDTO(
-    Long id,
-    String email
+		Long id,
+		String name,
+		String email
 ) {}

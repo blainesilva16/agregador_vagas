@@ -32,14 +32,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // rotas públicas
         if (path.equals("/auth/gerarToken")
-                || (path.equals("/api/clientes") && "POST".equalsIgnoreCase(method))
-                || path.equals("/api/clientes/login")
-                || path.equals("/api/clientes/reset-senha")
-                || path.startsWith("/swagger-ui")
-                || path.startsWith("/v2/api-docs")
-                || path.startsWith("/v3/api-docs")
-                || path.startsWith("/swagger-resources")
-                || path.startsWith("/webjars")) {
+        		 || (path.equals("/api/clientes") && "POST".equalsIgnoreCase(method))
+                 || (path.equals("/api/clientes/resetpass") && "PATCH".equalsIgnoreCase(method))
+                 || path.startsWith("/swagger-ui")
+                 || path.startsWith("/v2/api-docs")
+                 || path.startsWith("/v3/api-docs")
+                 || path.startsWith("/swagger-resources")
+                 || path.startsWith("/webjars")) {
 
             filterChain.doFilter(request, response);
             return;
@@ -52,27 +51,27 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
 
             try {
-                DecodedJWT jwt = tokenService.verificarToken(token);
+                DecodedJWT jwt = tokenService.verificarToken(token); //verificação do token, se existe no banco, verifica assinatura, verifica se expirou
 
-                String email = jwt.getSubject();
-                String role = jwt.getClaim("role").asString(); // <- claim do TokenService
-
-                if (role == null || role.isBlank()) {
+                String email = jwt.getSubject(); //guarda o JSON chave = sub = email e valor = cliente@email.com
+                String role = jwt.getClaim("role").asString(); //pega o claim do role, se é role = cliente ou role = usuario
+                
+                if (role == null || role.isBlank()) { //verifica se o role existe e se o token não tiver role, é considerado inválido
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write("Token sem role");
                     return;
                 }
 
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role)); //o springSecurity exige prefixo nas permissões
 
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(email, null, authorities);
+                        new UsernamePasswordAuthenticationToken(email, null, authorities); //o spring cria um objeto representando usuário logado no sistema
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextHolder.getContext().setAuthentication(auth); //o springSecurity passa a saber que o usuário ou cliente está autenticado
 
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Token inválido!");
+            } catch (Exception e) { //tratamento de erro
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401 status
+                response.getWriter().write("Token inválido!"); 
                 return;
             }
         }
