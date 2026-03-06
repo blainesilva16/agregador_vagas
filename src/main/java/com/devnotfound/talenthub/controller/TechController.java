@@ -1,7 +1,7 @@
 package com.devnotfound.talenthub.controller;
 
 import com.devnotfound.talenthub.dto.TechRequestDTO;
-import com.devnotfound.talenthub.entity.Tech;
+import com.devnotfound.talenthub.dto.TechResponseDTO;
 import com.devnotfound.talenthub.service.TechService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +19,23 @@ public class TechController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tech>> listAll() {
+    public ResponseEntity<List<TechResponseDTO>> listAll() {
         return ResponseEntity.ok(techService.listAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tech> findById(@PathVariable Integer id) {
+    public ResponseEntity<TechResponseDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(techService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Tech> create(@RequestBody TechRequestDTO dto) {
-        Tech created = techService.create(dto);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<TechResponseDTO> create(@RequestBody TechRequestDTO dto) {
+        TechResponseDTO responseDTO = techService.create(dto);
+        return ResponseEntity.status(201).body(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tech> update(@PathVariable Integer id,
+    public ResponseEntity<TechResponseDTO> update(@PathVariable Integer id,
                                        @RequestBody TechRequestDTO dto) {
         return ResponseEntity.ok(techService.update(id, dto));
     }
