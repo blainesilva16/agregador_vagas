@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name = "cliente_favoritos",
+    name = "vaga_favoritos",
     uniqueConstraints = @UniqueConstraint(columnNames = {"cliente_id", "vaga_id"})
 )
 @Data
 @NoArgsConstructor
-public class ClienteFavorito {
+public class VagaFavorito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
