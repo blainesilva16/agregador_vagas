@@ -25,33 +25,43 @@ public class AuthController {
 
     @PostMapping("/gerarToken")
     @Operation(summary = "Gerar Token", description = "Gera token de acesso à API para USER ou CLIENTE")
-    public ResponseEntity<?> gerarToken(@RequestBody @Valid LoginRequestDTO dto) {
+    public ResponseEntity<TokenResponseDTO> gerarToken(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
 
-        String origem = dto.origem();
+        String origem = loginRequestDTO.origem();
 
-        if (!"USER".equalsIgnoreCase(origem) && !"CLIENTE".equalsIgnoreCase(origem)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Origem inválida!");
+        if (origem == null || (!"USER".equalsIgnoreCase(origem) && !"CLIENTE".equalsIgnoreCase(origem))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new TokenResponseDTO(null, null, null, "Origem inválida! Use USER ou CLIENTE."));
         }
 
-        boolean authenticated =
-                "USER".equalsIgnoreCase(origem)
-                        ? userService.authenticate(dto.email(), dto.password())
-                        : authenticateCliente(dto.email(), dto.password());
+        String origemUpper = origem.toUpperCase();
 
-        if (!authenticated) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas!");
+        Long id;
+        String name;
+        String email = loginRequestDTO.email();
+
+        if ("USER".equalsIgnoreCase(origemUpper)) {
+
+            boolean ok = userService.authenticate(email, loginRequestDTO.password());
+            if (!ok) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new TokenResponseDTO(null, null, null, "Credenciais inválidas!"));
+            }
+
+            var userDto = userService.findByEmail(email);
+            id = userDto.id().longValue();
+            name = userDto.name();
+            email = userDto.email();
+
+        } else {
+            
+            var cliente = clienteAuthService.authenticate(email, loginRequestDTO.password());
+            id = cliente.getId();
+            name = cliente.getName();
+            email = cliente.getEmail();
         }
 
-        String token = tokenService.gerarToken(dto.email(), origem.toUpperCase());
-        return ResponseEntity.ok(new TokenResponseDTO(token));
-    }
-
-    private boolean authenticateCliente(String email, String password) {
-        try {
-            clienteAuthService.authenticate(email, password); 
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        String token = tokenService.gerarToken(email, origemUpper);
+        return ResponseEntity.ok(new TokenResponseDTO(token, id, name, email));
     }
 }

@@ -30,7 +30,7 @@ public class ClienteFavoritoService {
         clienteFavorito.setCliente(cliente);
         clienteFavorito.setVagaId(vagaId);
 
-        favoritoRepository.save(fav);
+        favoritoRepository.save(clienteFavorito);
     }
 
     public void desfavoritar(String vagaId) {
