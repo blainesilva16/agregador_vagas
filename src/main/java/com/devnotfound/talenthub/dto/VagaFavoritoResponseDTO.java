@@ -2,7 +2,7 @@ package com.devnotfound.talenthub.dto;
 
 import java.time.LocalDateTime;
 
-public record ClienteFavoritoResponseDTO(
+public record VagaFavoritoResponseDTO(
 		String vagaId,
         LocalDateTime createdAt
 ) {}

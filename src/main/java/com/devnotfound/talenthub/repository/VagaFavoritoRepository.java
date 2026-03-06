@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.devnotfound.talenthub.entity.ClienteFavorito;
+import com.devnotfound.talenthub.entity.VagaFavorito;
 
-public interface ClienteFavoritoRepository extends JpaRepository<ClienteFavorito, Long> {
+public interface VagaFavoritoRepository extends JpaRepository<VagaFavorito, Long> {
 	boolean existsByClienteIdAndVagaId(Long clienteId, String vagaId);
 
     void deleteByClienteIdAndVagaId(Long clienteId, String vagaId);
 
-    List<ClienteFavorito> findByClienteId(Long clienteId);
+    List<VagaFavorito> findByClienteId(Long clienteId);
 }

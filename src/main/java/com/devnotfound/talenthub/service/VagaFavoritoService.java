@@ -1,10 +1,10 @@
 package com.devnotfound.talenthub.service;
 
-import com.devnotfound.talenthub.dto.ClienteFavoritoResponseDTO;
+import com.devnotfound.talenthub.dto.VagaFavoritoResponseDTO;
 import com.devnotfound.talenthub.entity.Cliente;
-import com.devnotfound.talenthub.entity.ClienteFavorito;
+import com.devnotfound.talenthub.entity.VagaFavorito;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
-import com.devnotfound.talenthub.repository.ClienteFavoritoRepository;
+import com.devnotfound.talenthub.repository.VagaFavoritoRepository;
 import com.devnotfound.talenthub.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,10 +14,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ClienteFavoritoService {
+public class VagaFavoritoService {
 
     private final ClienteRepository clienteRepository;
-    private final ClienteFavoritoRepository favoritoRepository;
+    private final VagaFavoritoRepository favoritoRepository;
 
     public void favoritar(String vagaId) {
         Cliente cliente = getClienteLogado();
@@ -26,11 +26,11 @@ public class ClienteFavoritoService {
             return; 
         }
 
-        ClienteFavorito clienteFavorito = new ClienteFavorito();
-        clienteFavorito.setCliente(cliente);
-        clienteFavorito.setVagaId(vagaId);
+        VagaFavorito vagaFavorito = new VagaFavorito();
+        vagaFavorito.setCliente(cliente);
+        vagaFavorito.setVagaId(vagaId);
 
-        favoritoRepository.save(clienteFavorito);
+        favoritoRepository.save(vagaFavorito);
     }
 
     public void desfavoritar(String vagaId) {
@@ -38,12 +38,12 @@ public class ClienteFavoritoService {
         favoritoRepository.deleteByClienteIdAndVagaId(cliente.getId(), vagaId);
     }
 
-    public List<ClienteFavoritoResponseDTO> listar() {
+    public List<VagaFavoritoResponseDTO> listar() {
         Cliente cliente = getClienteLogado();
 
         return favoritoRepository.findByClienteId(cliente.getId())
                 .stream()
-                .map(f -> new ClienteFavoritoResponseDTO(f.getVagaId(), f.getCreatedAt()))
+                .map(f -> new VagaFavoritoResponseDTO(f.getVagaId(), f.getCreatedAt()))
                 .toList();
     }
 
