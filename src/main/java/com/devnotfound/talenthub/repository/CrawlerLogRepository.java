@@ -17,6 +17,8 @@ public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
 
 //    Page<CrawlerLog> findByPositionId(Integer id, Pageable pageable);
 
-    @Query("SELECT DISTINCT c.plataform FROM CrawlerLog c")
-    List<String> findDistinctPlataforms();
+    //Page<CrawlerLog> findByTechId(Integer id, Pageable pageable);
+
+    @Query("SELECT DISTINCT c.platform FROM CrawlerLog c")
+    List<String> findDistinctPlatforms();
 }

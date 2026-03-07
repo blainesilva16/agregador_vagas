@@ -20,14 +20,13 @@ public class CrawlerLog {
     @Column(length = 100)
     private String title;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "tech_id")
     private Tech tech;
 
-<<<<<<< HEAD
     @ManyToOne
     @JoinColumn(name = "position_id")
-    private Position position;*/
+    private Position position;
 
     @Column(name = "city_name", length = 100)
     private String cityName;
@@ -80,7 +79,7 @@ public class CrawlerLog {
     @Column(name = "creation_user")
     private CreationUser creationUser;
 
-    @Column(name = "plataform", length = 30)
-    private String plataform;
+    @Column(name = "platform", length = 30)
+    private String platform;
 
 }

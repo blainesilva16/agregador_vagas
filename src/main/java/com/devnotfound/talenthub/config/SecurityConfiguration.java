@@ -37,10 +37,7 @@ public class SecurityConfiguration {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
-                        //endpoint publico abaixo
-                        .requestMatchers("/jobs/public").permitAll()
-                        //endpoint privado abaixo
-                        .requestMatchers("/jobs/private").authenticated()
+                        .requestMatchers("GET", "/jobs/public").permitAll()
                         .requestMatchers("POST", "/api/user").permitAll()
                         .requestMatchers("POST", "/api/customer").permitAll()
                         .anyRequest().authenticated()

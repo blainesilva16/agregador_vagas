@@ -19,7 +19,7 @@ public class CrawlerLogMapper {
                 crawlerLog.getHiringType(),
                 crawlerLog.getTechLevel(),
                 crawlerLog.getSalaryRange(),
-                crawlerLog.getPlataform(),
+                crawlerLog.getPlatform(),
                 crawlerLog.getCreationDate()
         );
     }

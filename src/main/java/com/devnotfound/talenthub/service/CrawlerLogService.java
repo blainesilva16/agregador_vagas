@@ -8,7 +8,9 @@ import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.CrawlerLogMapper;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.specification.CrawlerLogSpecification;
+import com.devnotfound.talenthub.repository.PositionRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,46 +20,34 @@ import java.util.List;
 
 //checar o pageable
 @Service
+@RequiredArgsConstructor
 public class CrawlerLogService {
 
     private final CrawlerLogRepository repository;
-    //private final PostionRepository postionRepository;
-
-    public CrawlerLogService(CrawlerLogRepository repository/*, PositionRepository positionRepository*/) {
-        this.repository = repository;
-        //this.positionRepository = positionRepository;
-    }
+    private final PositionRepository positionRepository;
 
     //Cliente LOGADO
-    public Page<CrawlerLogResponseDTO> findAllLogsLogged(Pageable pageable) {
+    public Page<CrawlerLogResponseDTO> findAllLogsLogged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
 
-        Page<CrawlerLog> page = repository.findAll(pageable);
+        Page<CrawlerLog> page = repository.findAll(
+                CrawlerLogSpecification.filter(filterDTO), pageable);
 
         return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
     //Cliente DESLOGADO
-    public Page<CrawlerLogResponseDTO> findAllLogsUnlogged(Pageable pageable) {
+    public Page<CrawlerLogResponseDTO> findAllLogsUnlogged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
 
-        Page<CrawlerLog> page = repository.findAll(pageable);
-
-        return page.map(CrawlerLogMapper::toResponseDTO);
-    }
-
-    public Page<CrawlerLogResponseDTO> search(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
-        //findAll(Spec spec, Pageable pageable)
-        Page<CrawlerLog> page =
-                repository.findAll(
-                        CrawlerLogSpecification.filter(
-                                filterDTO), pageable);
+        Page<CrawlerLog> page = repository.findAll(
+                CrawlerLogSpecification.filter(filterDTO), pageable);
 
         return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
     /*public Page<CrawlerLogResponseDTO> findByPositionId(Integer id, Pageable pageable) {
 
-        if (!postionRepository.existsById(id)) {
-            return new ResourceNotFoundException(
+        if (!positionRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
                     SystemConstants.JOB_NOT_FOUND_BY_POSITION + id
             );
         }
@@ -68,7 +58,7 @@ public class CrawlerLogService {
         return page.map(CrawlerLogMapper::toResponseDTO);
       }*/
 
-    public List<String> findDistinctPlataforms() {
-        return repository.findDistinctPlataforms();
+    public List<String> findDistinctPlatforms() {
+        return repository.findDistinctPlatforms();
     }
 }

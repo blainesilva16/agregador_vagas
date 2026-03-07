@@ -5,6 +5,7 @@ import com.devnotfound.talenthub.dto.CrawlerLogResponseDTO;
 import com.devnotfound.talenthub.entity.CrawlerLog;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.service.CrawlerLogService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,30 +22,19 @@ public class CrawlerLogController {
     private final CrawlerLogService service;
 
     @GetMapping("/public")
-    public Page<CrawlerLogResponseDTO> publicSearch(Pageable pageable) {
-        return service.findAllLogsUnlogged(pageable);
+    public Page<CrawlerLogResponseDTO> searchUnlloged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
+        return service.findAllLogsUnlogged(filterDTO, pageable);
     }
-
+//falar da operation ajudar e n sabia antes
     @GetMapping("/private")
-    public Page<CrawlerLogResponseDTO> privateSearch(Pageable pageable) {
-        return service.findAllLogsLogged(pageable);
+    public Page<CrawlerLogResponseDTO> searchLogged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
+        return service.findAllLogsLogged(filterDTO, pageable);
     }
 
-    //metodo de listagem/busca com filtro e paginação.
-    @GetMapping
-    public Page<CrawlerLogResponseDTO> search(
-            CrawlerLogFilterDTO filterDTO,
-            Pageable pageable
-    ) {
-        return service.search(
-                filterDTO,
-                pageable);
-    }
-
-    //endpoint REST q retorna uma lista de valores únicos do campo plataform
-    @GetMapping("/plataforms")
-    public List<String> getPlataforms() {
-        return service.findDistinctPlataforms();
+    @GetMapping("/platforms")
+    @Operation(summary = "Retorna lista de valores únicos do campo platform")
+    public List<String> getPlatforms() {
+        return service.findDistinctPlatforms();
     }
 
     /*@GetMapping("/positions/{id}")

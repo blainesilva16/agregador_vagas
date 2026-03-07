@@ -4,8 +4,6 @@ import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
 import com.devnotfound.talenthub.entity.CrawlerLog;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
@@ -16,8 +14,8 @@ public class CrawlerLogSpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (dto.plataform() != null) {
-                predicates.add(cb.equal(root.get("plataform"), dto.plataform()));
+            if (dto.platform() != null) {
+                predicates.add(cb.equal(root.get("platform"), dto.platform()));
             }
 
             if (dto.positionId() != null) {
