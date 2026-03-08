@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//checar o pageable
 @Service
 @RequiredArgsConstructor
 public class CrawlerLogService {
@@ -26,7 +25,6 @@ public class CrawlerLogService {
     private final CrawlerLogRepository repository;
     private final PositionRepository positionRepository;
 
-    //Cliente LOGADO
     public Page<CrawlerLogResponseDTO> findAllLogsLogged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
 
         Page<CrawlerLog> page = repository.findAll(
@@ -35,7 +33,6 @@ public class CrawlerLogService {
         return page.map(CrawlerLogMapper::toResponseDTO);
     }
 
-    //Cliente DESLOGADO
     public Page<CrawlerLogResponseDTO> findAllLogsUnlogged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
 
         Page<CrawlerLog> page = repository.findAll(
@@ -58,7 +55,7 @@ public class CrawlerLogService {
         return page.map(CrawlerLogMapper::toResponseDTO);
       }*/
 
-    public List<String> findDistinctPlatforms() {
-        return repository.findDistinctPlatforms();
+    public List<String> findDistinctPlataforms() {
+        return repository.findDistinctPlataforms();
     }
 }

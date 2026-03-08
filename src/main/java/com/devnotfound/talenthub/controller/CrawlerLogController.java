@@ -7,6 +7,7 @@ import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.service.CrawlerLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +23,15 @@ public class CrawlerLogController {
     private final CrawlerLogService service;
 
     @GetMapping("/public")
-    public Page<CrawlerLogResponseDTO> searchUnlloged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
+    public Page<CrawlerLogResponseDTO> searchUnlloged(@ParameterObject CrawlerLogFilterDTO filterDTO,
+                                                      @ParameterObject Pageable pageable) {
         return service.findAllLogsUnlogged(filterDTO, pageable);
     }
-//falar da operation ajudar e n sabia antes
-    @GetMapping("/private")
-    public Page<CrawlerLogResponseDTO> searchLogged(CrawlerLogFilterDTO filterDTO, Pageable pageable) {
-        return service.findAllLogsLogged(filterDTO, pageable);
-    }
 
-    @GetMapping("/platforms")
-    @Operation(summary = "Retorna lista de valores únicos do campo platform")
-    public List<String> getPlatforms() {
-        return service.findDistinctPlatforms();
+    @GetMapping("/private")
+    public Page<CrawlerLogResponseDTO> searchLogged(@ParameterObject CrawlerLogFilterDTO filterDTO,
+                                                    @ParameterObject Pageable pageable) {
+        return service.findAllLogsLogged(filterDTO, pageable);
     }
 
     /*@GetMapping("/positions/{id}")
@@ -44,4 +41,9 @@ public class CrawlerLogController {
     ) {
         return service.findByPositionId(id, pageable);
     }*/
+
+    @GetMapping("/plataforms")
+    public List<String> getPlataforms() {
+        return service.findDistinctPlataforms();
+    }
 }

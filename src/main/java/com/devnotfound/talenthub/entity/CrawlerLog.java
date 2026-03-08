@@ -79,7 +79,7 @@ public class CrawlerLog {
     @Column(name = "creation_user")
     private CreationUser creationUser;
 
-    @Column(name = "platform", length = 30)
-    private String platform;
+    @Column(name = "plataform", length = 30)
+    private String plataform;
 
 }

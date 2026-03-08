@@ -15,6 +15,6 @@ public record CrawlerLogResponseDTO(
         String hiringType,
         String techLevel,
         BigDecimal salaryRange,
-        String platform,
+        String plataform,
         LocalDateTime creationDate
 ) {}

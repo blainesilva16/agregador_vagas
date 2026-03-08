@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record CrawlerLogFilterDTO(
-   String platform,
+   String plataform,
    Integer positionId,
    Integer techId,
    LocalDateTime startDate,

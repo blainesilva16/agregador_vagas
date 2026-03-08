@@ -14,8 +14,8 @@ public class CrawlerLogSpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (dto.platform() != null) {
-                predicates.add(cb.equal(root.get("platform"), dto.platform()));
+            if (dto.plataform() != null) {
+                predicates.add(cb.equal(root.get("plataform"), dto.plataform()));
             }
 
             if (dto.positionId() != null) {
