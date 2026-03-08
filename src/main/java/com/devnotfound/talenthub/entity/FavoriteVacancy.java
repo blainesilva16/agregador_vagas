@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 )
 @Data
 @NoArgsConstructor
-public class VagaFavorito {
+public class FavoriteVacancy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class VagaFavorito {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
+    private Customer cliente;
 
     @Column(name = "vaga_id", nullable = false, length = 120)
     private String vagaId;

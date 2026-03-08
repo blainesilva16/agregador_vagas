@@ -31,9 +31,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // rotas públicas
-        if (path.equals("/auth/gerarToken")
-        		 || (path.equals("/api/clientes") && "POST".equalsIgnoreCase(method))
-                 || (path.equals("/api/clientes/resetpass") && "PATCH".equalsIgnoreCase(method))
+        if (path.equals("/auth/login")
+        		 || (path.equals("/api/customers") && "POST".equalsIgnoreCase(method))
+                 || (path.equals("/api/customers/reset-password") && "PATCH".equalsIgnoreCase(method))
                  || path.startsWith("/swagger-ui")
                  || path.startsWith("/v2/api-docs")
                  || path.startsWith("/v3/api-docs")
@@ -51,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
 
             try {
-                DecodedJWT jwt = tokenService.verificarToken(token); //verificação do token, se existe no banco, verifica assinatura, verifica se expirou
+                DecodedJWT jwt = tokenService.verifyToken(token); //verificação do token, se existe no banco, verifica assinatura, verifica se expirou
 
                 String email = jwt.getSubject(); //guarda o JSON chave = sub = email e valor = cliente@email.com
                 String role = jwt.getClaim("role").asString(); //pega o claim do role, se é role = cliente ou role = usuario

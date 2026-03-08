@@ -1,51 +1,50 @@
 package com.devnotfound.talenthub.controller;
 
+import com.devnotfound.talenthub.constants.SystemConstants;
 import com.devnotfound.talenthub.dto.LoginRequestDTO;
 import com.devnotfound.talenthub.dto.TokenResponseDTO;
-import com.devnotfound.talenthub.service.ClienteAuthService;
+import com.devnotfound.talenthub.service.CustomerAuthService;
 import com.devnotfound.talenthub.service.TokenService;
 import com.devnotfound.talenthub.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Autenticação", description = "Rota responsável por gerar o Token!")
+@Tag(name = "Authentication", description = "Responsible for customer and user authentication.")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final TokenService tokenService;
     private final UserService userService;
-    private final ClienteAuthService clienteAuthService;
+    private final CustomerAuthService customerAuthService;
 
-    @PostMapping("/gerarToken")
-    @Operation(summary = "Gerar Token", description = "Gera token de acesso à API para USER ou CLIENTE")
-    public ResponseEntity<TokenResponseDTO> gerarToken(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+    @PostMapping("/login")
+    @Operation(summary = "Login", description = "Authenticates USER or CUSTOMER and returns an access token.")
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
 
-        String origem = loginRequestDTO.origem();
+        String origin = loginRequestDTO.origem();
 
-        if (origem == null || (!"USER".equalsIgnoreCase(origem) && !"CLIENTE".equalsIgnoreCase(origem))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new TokenResponseDTO(null, null, null, "Origem inválida! Use USER ou CLIENTE."));
+        if (!"USER".equalsIgnoreCase(origin) && !"CUSTOMER".equalsIgnoreCase(origin)) {
+            throw new IllegalArgumentException(SystemConstants.INVALID_ORIGIN);
         }
 
-        String origemUpper = origem.toUpperCase();
+        String originUpper = origin.toUpperCase(); 
 
         Long id;
         String name;
         String email = loginRequestDTO.email();
 
-        if ("USER".equalsIgnoreCase(origemUpper)) {
+        if ("USER".equals(originUpper)) {
+            boolean authenticated = userService.authenticate(email, loginRequestDTO.password());
 
-            boolean ok = userService.authenticate(email, loginRequestDTO.password());
-            if (!ok) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new TokenResponseDTO(null, null, null, "Credenciais inválidas!"));
+            if (!authenticated) {
+                throw new BadCredentialsException(SystemConstants.INVALID_CREDENTIALS);
             }
 
             var userDto = userService.findByEmail(email);
@@ -54,14 +53,14 @@ public class AuthController {
             email = userDto.email();
 
         } else {
-            
-            var cliente = clienteAuthService.authenticate(email, loginRequestDTO.password());
-            id = cliente.getId();
-            name = cliente.getName();
-            email = cliente.getEmail();
+            var customer = customerAuthService.authenticate(email, loginRequestDTO.password());
+            id = customer.getId();
+            name = customer.getName();
+            email = customer.getEmail();
         }
 
-        String token = tokenService.gerarToken(email, origemUpper);
+        String token = tokenService.generateToken(email, originUpper);
+
         return ResponseEntity.ok(new TokenResponseDTO(token, id, name, email));
     }
 }
