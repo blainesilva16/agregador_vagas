@@ -19,4 +19,6 @@ public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
 
     @Query("SELECT DISTINCT c.plataform FROM CrawlerLog c")
     List<String> findDistinctPlataforms();
+
+    boolean existsByTechId(Integer id);
 }

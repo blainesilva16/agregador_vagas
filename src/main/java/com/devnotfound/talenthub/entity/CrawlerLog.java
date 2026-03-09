@@ -4,6 +4,8 @@ import com.devnotfound.talenthub.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,9 +26,9 @@ public class CrawlerLog {
     @JoinColumn(name = "tech_id")
     private Tech tech;
 
-//    @ManyToOne
-//    @JoinColumn(name = "position_id")
-//    private Position position;
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     @Column(name = "city_name", length = 100)
     private String cityName;

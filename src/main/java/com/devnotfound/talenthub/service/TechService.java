@@ -7,7 +7,9 @@ import com.devnotfound.talenthub.entity.Tech;
 import com.devnotfound.talenthub.exception.DuplicateNameException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.TechMapper;
+import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.repository.TechRepository;
+import com.devnotfound.talenthub.exception.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +19,14 @@ import java.util.stream.Collectors;
 public class TechService {
 
     private final TechRepository techRepository;
+    private final CrawlerLogRepository crawlerLogRepository;
     private final TechMapper techMapper;
 
 
-    public TechService(TechRepository techRepository, TechMapper techMapper) {
+    public TechService(TechRepository techRepository, TechMapper techMapper, CrawlerLogRepository crawlerLogRepository) {
         this.techRepository = techRepository;
         this.techMapper = techMapper;
+        this.crawlerLogRepository = crawlerLogRepository;
     }
 
     public List<TechResponseDTO> listAll() {
@@ -37,6 +41,12 @@ public class TechService {
                         new ResourceNotFoundException(SystemConstants.TECH_NOT_FOUND_ID + id));
 
         return techMapper.toResponseDTO(tech);
+    }
+
+    public List<TechResponseDTO> findByName(String name) {
+        return techRepository.findByNameContainingIgnoreCase(name).stream()
+                .map(techMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     public TechResponseDTO create(TechRequestDTO dto) {
@@ -64,6 +74,11 @@ public class TechService {
             throw new DuplicateNameException(SystemConstants.TECH_ALREADY_EXISTS);
         }
 
+        boolean isTechInCrawler = crawlerLogRepository.existsByTechId(id);
+        if (isTechInCrawler) {
+            throw new DataIntegrityViolationException(SystemConstants.TECH_CAN_NOT_UPDATE);
+        }
+
         existingTech.setName(dto.name());
 
         Tech updatedTech = techRepository.save(existingTech);
@@ -76,6 +91,14 @@ public class TechService {
         Tech existingTech = techRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(SystemConstants.TECH_NOT_FOUND_ID + id));
+
+        boolean isTechInCrawler = crawlerLogRepository.existsByTechId(id);
+        if (isTechInCrawler) {
+            throw new DataIntegrityViolationException(SystemConstants.TECH_CAN_NOT_DELETE);
+        }
+
         techRepository.delete(existingTech);
+
     }
+
 }
