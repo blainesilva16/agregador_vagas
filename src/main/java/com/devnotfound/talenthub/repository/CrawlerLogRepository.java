@@ -15,7 +15,9 @@ import java.util.List;
 public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
         , JpaSpecificationExecutor<CrawlerLog> {
 
-//    Page<CrawlerLog> findByPosition_Id(Integer id, Pageable pageable);
+//    Page<CrawlerLog> findByPositionId(Integer id, Pageable pageable);
+
+    //Page<CrawlerLog> findByTechId(Integer id, Pageable pageable);
 
     @Query("SELECT DISTINCT c.plataform FROM CrawlerLog c")
     List<String> findDistinctPlataforms();

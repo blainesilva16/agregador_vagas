@@ -5,13 +5,12 @@ import com.devnotfound.talenthub.dto.CrawlerLogResponseDTO;
 import com.devnotfound.talenthub.entity.CrawlerLog;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.service.CrawlerLogService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,28 +22,28 @@ public class CrawlerLogController {
 
     private final CrawlerLogService service;
 
-    //metodo de listagem/busca com filtro e paginação.
-    @GetMapping
-    public Page<CrawlerLogResponseDTO> search(
-            CrawlerLogFilterDTO filterDTO,
-            Pageable pageable
-    ) {
-        return service.search(
-                filterDTO,
-                pageable);
+    @GetMapping("/public")
+    public Page<CrawlerLogResponseDTO> searchUnlloged(@ParameterObject CrawlerLogFilterDTO filterDTO,
+                                                      @ParameterObject Pageable pageable) {
+        return service.findAllLogsUnlogged(filterDTO, pageable);
     }
 
-    //endpoint REST q retorna uma lista de valores únicos do campo plataform
+    @GetMapping("/private")
+    public Page<CrawlerLogResponseDTO> searchLogged(@ParameterObject CrawlerLogFilterDTO filterDTO,
+                                                    @ParameterObject Pageable pageable) {
+        return service.findAllLogsLogged(filterDTO, pageable);
+    }
+
+    /*@GetMapping("/positions/{id}")
+    public Page<CrawlerLogResponseDTO> findByPositionId(
+            @PathVariable Integer id,
+            Pageable pageable
+    ) {
+        return service.findByPositionId(id, pageable);
+    }*/
+
     @GetMapping("/plataforms")
     public List<String> getPlataforms() {
         return service.findDistinctPlataforms();
     }
-
-//    @GetMapping("/positions/{id}")
-//    public Page<CrawlerLogResponseDTO> findByPositionId(
-//            @RequestParam Integer id,
-//            Pageable pageable
-//    ) {
-//        return service.findByPosition_Id(id, pageable);
-//    }
 }
