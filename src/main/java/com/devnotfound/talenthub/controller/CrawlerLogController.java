@@ -34,16 +34,26 @@ public class CrawlerLogController {
         return service.findAllLogsLogged(filterDTO, pageable);
     }
 
-    /*@GetMapping("/positions/{id}")
+    @GetMapping("/positions/{id}")
     public Page<CrawlerLogResponseDTO> findByPositionId(
             @PathVariable Integer id,
             Pageable pageable
     ) {
         return service.findByPositionId(id, pageable);
-    }*/
+    }
 
     @GetMapping("/plataforms")
     public List<String> getPlataforms() {
         return service.findDistinctPlataforms();
+    }
+
+    @GetMapping("/states")
+    public List<String> getDistinctStates() {
+        return service.findDistinctUf();
+    }
+
+    @GetMapping("/cities")
+    public List<String> getDistinctCitiesByUf(@RequestParam String ufAbrev) {
+        return service.findCitiesByState(ufAbrev);
     }
 }
