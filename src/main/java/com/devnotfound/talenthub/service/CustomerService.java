@@ -5,6 +5,7 @@ import com.devnotfound.talenthub.dto.CustomerRequestDTO;
 import com.devnotfound.talenthub.dto.CustomerResponseDTO;
 import com.devnotfound.talenthub.dto.CustomerUpdateDTO;
 import com.devnotfound.talenthub.entity.Customer;
+import com.devnotfound.talenthub.entity.User;
 import com.devnotfound.talenthub.exception.DuplicateEmailException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.CustomerMapper;
@@ -96,6 +97,13 @@ public class CustomerService {
             throw new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id);
         }
         customerRepository.deleteById(id);
+    }
+    
+    public void updatePassword(Long id, String newPassword) {
+    	Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
+        customer.setPassword(passwordEncoder.encode(newPassword));
+        customerRepository.save(customer);
     }
 
     public String resetPassword(String email) {

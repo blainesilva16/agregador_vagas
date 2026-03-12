@@ -70,6 +70,12 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
    
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody String newPassword) {
+        customerService.updatePassword(id, newPassword);
+        return ResponseEntity.noContent().build();
+    }
+    
     @PatchMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPasswordRequestDTO dto) {
         String newPassword = customerService.resetPassword(dto.email());
