@@ -1,49 +1,66 @@
 package com.devnotfound.talenthub.controller;
 
+import com.devnotfound.talenthub.constants.SystemConstants;
 import com.devnotfound.talenthub.dto.LoginRequestDTO;
-import com.devnotfound.talenthub.dto.UserResponseDTO;
+import com.devnotfound.talenthub.dto.TokenResponseDTO;
+import com.devnotfound.talenthub.service.CustomerAuthService;
 import com.devnotfound.talenthub.service.TokenService;
 import com.devnotfound.talenthub.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Autenticação", description = "Rota responsavel por gerar o Token!")
+@Tag(name = "Authentication", description = "Responsible for customer and user authentication.")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
+    private final UserService userService;
+    private final CustomerAuthService customerAuthService;
 
-    @Autowired
-    private UserService userService;
+    @PostMapping("/login")
+    @Operation(summary = "Login", description = "Authenticates USER or CUSTOMER and returns an access token.")
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
 
-    @PostMapping("/gerarToken")
-    @Operation(summary = "Gerar Token", description = "Rota responsavel por gerar o Token de acesso a API!")
-    public ResponseEntity<?> gerarToken(LoginRequestDTO loginRequestDTO) {
-        try {
-            if ("USER".equalsIgnoreCase(loginRequestDTO.origem())) {
-                boolean authenticated = userService.authenticate(loginRequestDTO.email(), loginRequestDTO.password());
+        String origin = loginRequestDTO.origem();
 
-                if (!authenticated) {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
-                }
-            } else if ("CUSTOMER".equalsIgnoreCase(loginRequestDTO.origem())) {
-                // para quem estiver implementando o customer
-            } else {
-                return ResponseEntity.status(403).build();
+        if (!"USER".equalsIgnoreCase(origin) && !"CUSTOMER".equalsIgnoreCase(origin)) {
+            throw new IllegalArgumentException(SystemConstants.INVALID_ORIGIN);
+        }
+
+        String originUpper = origin.toUpperCase(); 
+
+        Long id;
+        String name;
+        String email = loginRequestDTO.email();
+
+        if ("USER".equals(originUpper)) {
+            boolean authenticated = userService.authenticate(email, loginRequestDTO.password());
+
+            if (!authenticated) {
+                throw new BadCredentialsException(SystemConstants.INVALID_CREDENTIALS);
             }
 
-            var lRetorno = tokenService.gerarToken(loginRequestDTO.email());
-            return ResponseEntity.ok(lRetorno);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            var userDto = userService.findByEmail(email);
+            id = userDto.id().longValue();
+            name = userDto.name();
+            email = userDto.email();
+
+        } else {
+            var customer = customerAuthService.authenticate(email, loginRequestDTO.password());
+            id = customer.getId();
+            name = customer.getName();
+            email = customer.getEmail();
         }
+
+        String token = tokenService.generateToken(email, originUpper);
+
+        return ResponseEntity.ok(new TokenResponseDTO(token, id, name, email));
     }
 }

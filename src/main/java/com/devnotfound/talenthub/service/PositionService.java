@@ -4,8 +4,10 @@ import com.devnotfound.talenthub.constants.SystemConstants;
 import com.devnotfound.talenthub.dto.PositionRequestDTO;
 import com.devnotfound.talenthub.dto.PositionResponseDTO;
 import com.devnotfound.talenthub.entity.Position;
+import com.devnotfound.talenthub.exception.DataIntegrityViolationException;
 import com.devnotfound.talenthub.exception.DuplicatePositionNameException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
+import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.repository.PositionRepository;
 import com.devnotfound.talenthub.mapper.PositionMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 public class PositionService {
 
     private final PositionRepository positionRepository;
+    private final CrawlerLogRepository crawlerLogRepository;
 
     public PositionResponseDTO findById(Integer id) {
         Position position = positionRepository.findById(id)
@@ -59,10 +62,9 @@ public class PositionService {
         if (existingPosition != null && !existingPosition.getId().equals(id)) {
             throw new DuplicatePositionNameException(SystemConstants.POSITION_ALREADY_EXISTS + dto.name());
         }
+
         position.setName(dto.name());
-
         Position updated = positionRepository.save(position);
-
         return PositionMapper.toResponseDTO(updated);
     }
 
@@ -70,6 +72,11 @@ public class PositionService {
         if (!positionRepository.existsById(id)) {
             throw new ResourceNotFoundException(SystemConstants.POSITION_NOT_FOUND_ID + id);
         }
+
+        if (crawlerLogRepository.existsByPositionId(id)) {
+            throw new DataIntegrityViolationException(SystemConstants.POSITION_CAN_NOT_DELETE);
+        }
+
         positionRepository.deleteById(id);
     }
 }
