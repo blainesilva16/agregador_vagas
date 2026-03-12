@@ -12,6 +12,5 @@ public record CustomerUpdateDTO(
 	        @Size(max = 150, message = "Email deve ter no máximo 150 caracteres.")
 	        String email,
 
-	        LocalDate birthdate,
-	        byte[] photo
+	        LocalDate birthdate
 	) {}

@@ -8,7 +8,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,8 +48,8 @@ public class SecurityConfiguration {
                             "/v3/api-docs/**"
                     ).permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/customers").permitAll()
-                    .requestMatchers(HttpMethod.PATCH, "/api/customers/reset-password").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/customer").permitAll()
+                    .requestMatchers(HttpMethod.PATCH, "/api/customer/reset-password").permitAll()
                     .requestMatchers("/api/favorites/**").hasRole("CUSTOMER")
                     .anyRequest().authenticated() 
             )
