@@ -9,6 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+<<<<<<< HEAD
+public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer> {
+}
+=======
 import java.util.List;
 
 //JpaSpecificationExecutor habilita findAll(Specification<T> spec, Pageable pageable)
@@ -34,3 +38,4 @@ public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
     List<String> findCitiesByUf(@Param("ufAbrev") String ufAbrev);
 
 }
+>>>>>>> main

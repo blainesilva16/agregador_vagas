@@ -28,7 +28,7 @@ public class FavoriteVacancyService {
     private final CustomerCrawlerFavoriteRepository customerCrawlerFavoriteRepository;
 
     @Transactional
-    public void favorite(Long crawlerId) {
+    public void favorite(Integer crawlerId) {
         Customer customer = getLoggedCustomer();
 
         if (customerCrawlerFavoriteRepository.existsByCustomerIdAndCrawlerLogId(customer.getId(), crawlerId)) {
@@ -47,7 +47,7 @@ public class FavoriteVacancyService {
     }
 
     @Transactional
-    public void unfavorite(Long crawlerId) {
+    public void unfavorite(Integer crawlerId) {
         Customer customer = getLoggedCustomer();
         customerCrawlerFavoriteRepository.deleteByCustomerIdAndCrawlerLogId(customer.getId(), crawlerId);
     }
@@ -59,7 +59,7 @@ public class FavoriteVacancyService {
     }
 
     @Transactional(readOnly = true)
-    public FavoriteVacancyStatusResponseDTO getFavoriteStatus(Long crawlerId) {
+    public FavoriteVacancyStatusResponseDTO getFavoriteStatus(Integer crawlerId) {
         Customer customer = getLoggedCustomer();
 
         boolean favorite = customerCrawlerFavoriteRepository

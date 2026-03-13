@@ -31,9 +31,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // rotas públicas
-        if (path.equals("/auth/login")
-        		 || (path.equals("/api/customers") && "POST".equalsIgnoreCase(method))
-                 || (path.equals("/api/customers/reset-password") && "PATCH".equalsIgnoreCase(method))
+        if (path.equals("/api/login")
+        		 || (path.equals("/api/customer") && "POST".equalsIgnoreCase(method))
+                 || (path.equals("/api/customer/reset-password") && "PATCH".equalsIgnoreCase(method))
                  || path.startsWith("/swagger-ui")
                  || path.startsWith("/v2/api-docs")
                  || path.startsWith("/v3/api-docs")
@@ -51,26 +51,26 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
 
             try {
-                DecodedJWT jwt = tokenService.verifyToken(token); //verificação do token, se existe no banco, verifica assinatura, verifica se expirou
+                DecodedJWT jwt = tokenService.verifyToken(token);
 
-                String email = jwt.getSubject(); //guarda o JSON chave = sub = email e valor = cliente@email.com
-                String role = jwt.getClaim("role").asString(); //pega o claim do role, se é role = cliente ou role = usuario
+                String email = jwt.getSubject();
+                String role = jwt.getClaim("role").asString();
                 
-                if (role == null || role.isBlank()) { //verifica se o role existe e se o token não tiver role, é considerado inválido
+                if (role == null || role.isBlank()) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write("Token sem role");
                     return;
                 }
 
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role)); //o springSecurity exige prefixo nas permissões
+                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(email, null, authorities); //o spring cria um objeto representando usuário logado no sistema
+                        new UsernamePasswordAuthenticationToken(email, null, authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(auth); //o springSecurity passa a saber que o usuário ou cliente está autenticado
+                SecurityContextHolder.getContext().setAuthentication(auth);
 
-            } catch (Exception e) { //tratamento de erro
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401 status
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token inválido!"); 
                 return;
             }

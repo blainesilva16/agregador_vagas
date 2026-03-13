@@ -6,7 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<<<<<<< HEAD
+import org.springframework.security.config.http.SessionCreationPolicy;
+=======
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+>>>>>>> main
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,6 +29,28 @@ public class SecurityConfiguration {
     }
 
     @Bean
+<<<<<<< HEAD
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                            "/swagger-ui/**",
+                            "/swagger-ui.html",
+                            "/v3/api-docs/**"
+                    ).permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/customer").permitAll()
+                    .requestMatchers(HttpMethod.PATCH, "/api/customer/reset-password").permitAll()
+                    .requestMatchers("/api/favorites/**").hasRole("CUSTOMER")
+                    .anyRequest().authenticated() 
+            )
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+=======
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
@@ -46,5 +72,6 @@ public class SecurityConfiguration {
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+>>>>>>> main
     }
 }

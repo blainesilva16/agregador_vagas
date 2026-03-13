@@ -3,7 +3,7 @@ package com.devnotfound.talenthub.dto;
 import java.time.LocalDateTime;
 
 public record FavoriteVacancyResponseDTO(
-        Long crawlerId,
+        Integer crawlerId,
         String title,
         String companyName,
         String postingLink,

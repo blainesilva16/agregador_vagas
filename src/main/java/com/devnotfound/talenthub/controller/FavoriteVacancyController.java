@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/favorites")
+@RequestMapping("/api/favorite")
 @RequiredArgsConstructor
 public class FavoriteVacancyController {
 
     private final FavoriteVacancyService favoriteVacancyService;
 
     @PostMapping("/{crawlerId}")
-    public ResponseEntity<Void> favorite(@PathVariable Long crawlerId) {
+    public ResponseEntity<Void> favorite(@PathVariable Integer crawlerId) {
         favoriteVacancyService.favorite(crawlerId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{crawlerId}")
-    public ResponseEntity<Void> unfavorite(@PathVariable Long crawlerId) {
+    public ResponseEntity<Void> unfavorite(@PathVariable Integer crawlerId) {
         favoriteVacancyService.unfavorite(crawlerId);
         return ResponseEntity.noContent().build();
     }
@@ -35,7 +35,7 @@ public class FavoriteVacancyController {
     }
 
     @GetMapping("/{crawlerId}/status")
-    public ResponseEntity<FavoriteVacancyStatusResponseDTO> getFavoriteStatus(@PathVariable Long crawlerId) {
+    public ResponseEntity<FavoriteVacancyStatusResponseDTO> getFavoriteStatus(@PathVariable Integer crawlerId) {
         return ResponseEntity.ok(favoriteVacancyService.getFavoriteStatus(crawlerId));
     }
 }

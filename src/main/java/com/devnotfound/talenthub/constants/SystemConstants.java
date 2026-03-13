@@ -18,6 +18,7 @@ public class SystemConstants {
     public static final String EMAIL_ALREADY_EXISTS = "Email já cadastrado: ";
     public static final String INVALID_CREDENTIALS = "Login ou senha inválidos.";
     public static final String INVALID_ORIGIN = "Origem inválida! Use USER ou CUSTOMER.";
+    public static final String CUSTOMER_NOT_FOUND_PHOTO = "Foto não encontrada para o cliente com id: ";
 
     public static final String TECH_NOT_FOUND_ID = "Tech não encontrada com id: ";
     public static final String TECH_ALREADY_EXISTS = "Já existe uma tecnologia com esse nome.";

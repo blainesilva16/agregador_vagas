@@ -11,9 +11,9 @@ import java.util.List;
 public interface CustomerCrawlerFavoriteRepository
         extends JpaRepository<CustomerCrawlerFavorite, CustomerCrawlerFavoriteId> {
 
-    boolean existsByCustomerIdAndCrawlerLogId(Long customerId, Long crawlerLogId);
+    boolean existsByCustomerIdAndCrawlerLogId(Integer customerId, Integer crawlerLogId);
 
-    void deleteByCustomerIdAndCrawlerLogId(Long customerId, Long crawlerLogId);
+    void deleteByCustomerIdAndCrawlerLogId(Integer customerId, Integer crawlerLogId);
 
     @Query("""
             SELECT new com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO(
@@ -27,5 +27,5 @@ public interface CustomerCrawlerFavoriteRepository
             WHERE f.customer.id = :customerId
             ORDER BY f.creationDate DESC
             """)
-    List<FavoriteVacancyResponseDTO> findFavoriteVacanciesByCustomerId(Long customerId);
+    List<FavoriteVacancyResponseDTO> findFavoriteVacanciesByCustomerId(Integer customerId);
 }

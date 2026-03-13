@@ -1,6 +1,6 @@
 package com.devnotfound.talenthub.dto;
 
 public record FavoriteVacancyStatusResponseDTO(
-        Long crawlerId,
+        Integer crawlerId,
         boolean favorite
 ) {}
