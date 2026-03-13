@@ -38,6 +38,8 @@ public class SecurityConfiguration {
                                 "/webjars/**"
                         ).permitAll()
                         .requestMatchers("GET", "/jobs/public").permitAll()
+                        .requestMatchers("GET", "/jobs/states").permitAll()
+                        .requestMatchers("GET", "/jobs/cities").permitAll()
                         .requestMatchers("POST", "/api/user").permitAll()
                         .requestMatchers("POST", "/api/customer").permitAll()
                         .anyRequest().authenticated()
