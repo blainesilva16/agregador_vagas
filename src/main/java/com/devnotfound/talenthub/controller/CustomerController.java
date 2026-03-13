@@ -28,7 +28,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<CustomerResponseDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(customerService.findById(id));
     }
 
@@ -43,7 +43,7 @@ public class CustomerController {
     }
     
     @GetMapping("/{id}/photo")
-    public ResponseEntity<byte[]> getPhoto(@PathVariable Long id) {
+    public ResponseEntity<byte[]> getPhoto(@PathVariable Integer id) {
         return customerService.getPhoto(id);
     }
 
@@ -53,25 +53,25 @@ public class CustomerController {
     }
     
     @PostMapping(value = "/{id}/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadPhoto(@PathVariable Long id,
+    public ResponseEntity<String> uploadPhoto(@PathVariable Integer id,
                                               @RequestParam("file") MultipartFile file) throws Exception {
         customerService.uploadPhoto(id, file);
         return ResponseEntity.ok("Foto atualizada com sucesso.");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> update(@PathVariable Long id, @RequestBody @Valid CustomerUpdateDTO dto) {
+    public ResponseEntity<CustomerResponseDTO> update(@PathVariable Integer id, @RequestBody @Valid CustomerUpdateDTO dto) {
         return ResponseEntity.ok(customerService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         customerService.delete(id);
         return ResponseEntity.noContent().build();
     }
    
     @PatchMapping("/{id}/password")
-    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody String newPassword) {
+    public ResponseEntity<Void> updatePassword(@PathVariable Integer id, @RequestBody String newPassword) {
         customerService.updatePassword(id, newPassword);
         return ResponseEntity.noContent().build();
     }

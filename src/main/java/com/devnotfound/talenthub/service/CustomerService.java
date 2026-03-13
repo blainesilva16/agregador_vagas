@@ -33,7 +33,7 @@ public class CustomerService {
         return CustomerMapper.toResponseDTO(customer);
     }
 
-    public CustomerResponseDTO findById(Long id) {
+    public CustomerResponseDTO findById(Integer id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
         return CustomerMapper.toResponseDTO(customer);
@@ -69,7 +69,7 @@ public class CustomerService {
         return CustomerMapper.toResponseDTO(saved);
     }
 
-    public CustomerResponseDTO update(Long id, CustomerUpdateDTO dto) {
+    public CustomerResponseDTO update(Integer id, CustomerUpdateDTO dto) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
 
@@ -92,14 +92,14 @@ public class CustomerService {
         return CustomerMapper.toResponseDTO(updated);
     }
 
-    public void delete(Long id) {
+    public void delete(Integer id) {
         if (!customerRepository.existsById(id)) {
             throw new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id);
         }
         customerRepository.deleteById(id);
     }
     
-    public void updatePassword(Long id, String newPassword) {
+    public void updatePassword(Integer id, String newPassword) {
     	Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
         customer.setPassword(passwordEncoder.encode(newPassword));
@@ -117,7 +117,7 @@ public class CustomerService {
         return newPassword;
     }
     
-    public void uploadPhoto(Long id, MultipartFile file) throws Exception {
+    public void uploadPhoto(Integer id, MultipartFile file) throws Exception {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
 
@@ -134,7 +134,7 @@ public class CustomerService {
         customerRepository.save(customer);
     }
     
-    public ResponseEntity<byte[]> getPhoto(Long id) {
+    public ResponseEntity<byte[]> getPhoto(Integer id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
 

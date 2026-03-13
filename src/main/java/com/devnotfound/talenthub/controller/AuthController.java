@@ -36,7 +36,7 @@ public class AuthController {
 
         String originUpper = origin.toUpperCase(); 
 
-        Long id;
+        Integer id;
         String name;
         String email = loginRequestDTO.email();
 
@@ -48,7 +48,7 @@ public class AuthController {
             }
 
             var userDto = userService.findByEmail(email);
-            id = userDto.id().longValue();
+            id = userDto.id().intValue();
             name = userDto.name();
             email = userDto.email();
 

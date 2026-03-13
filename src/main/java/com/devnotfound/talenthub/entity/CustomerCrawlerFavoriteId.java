@@ -15,12 +15,12 @@ public class CustomerCrawlerFavoriteId implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "customer_id")
-    private Long customerId;
+    private Integer customerId;
 
     @Column(name = "crawler_id")
-    private Long crawlerId;
+    private Integer crawlerId;
 
-    public CustomerCrawlerFavoriteId(Long customerId, Long crawlerId) {
+    public CustomerCrawlerFavoriteId(Integer customerId, Integer crawlerId) {
         this.customerId = customerId;
         this.crawlerId = crawlerId;
     }
