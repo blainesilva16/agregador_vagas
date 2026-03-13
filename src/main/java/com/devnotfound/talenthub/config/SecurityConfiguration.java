@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .requestMatchers("GET", "/jobs/public").permitAll()
                         .requestMatchers("GET", "/jobs/states").permitAll()
                         .requestMatchers("GET", "/jobs/cities").permitAll()
+                        .requestMatchers("GET", "/jobs/plataforms").permitAll()
                         .requestMatchers("POST", "/api/user").permitAll()
                         .requestMatchers("POST", "/api/customer").permitAll()
                         .anyRequest().authenticated()

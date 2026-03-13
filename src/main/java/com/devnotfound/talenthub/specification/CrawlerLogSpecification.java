@@ -60,10 +60,7 @@ public class CrawlerLogSpecification {
 
             if (dto.cityName() != null) {
                 predicates.add(
-                        cb.like(cb.lower(
-                                root.get("cityName")),
-                                "%" + dto.cityName().toLowerCase() + "%"
-                        )
+                        cb.equal(root.get("cityName"), dto.cityName())
                 );
             }
 
