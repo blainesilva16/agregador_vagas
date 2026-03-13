@@ -28,6 +28,11 @@ public class TechController {
         return ResponseEntity.ok(techService.findById(id));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<TechResponseDTO>> findByName(@RequestParam String name) {
+        return ResponseEntity.ok(techService.findByName(name));
+    }
+
     @PostMapping
     public ResponseEntity<TechResponseDTO> create(@RequestBody TechRequestDTO dto) {
         TechResponseDTO responseDTO = techService.create(dto);

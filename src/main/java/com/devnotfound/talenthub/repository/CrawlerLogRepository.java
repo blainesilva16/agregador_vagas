@@ -25,9 +25,12 @@ public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
     @Query("SELECT DISTINCT c.plataform FROM CrawlerLog c")
     List<String> findDistinctPlataforms();
 
+    boolean existsByTechId(Integer id);
+
     @Query("SELECT DISTINCT c.ufName FROM CrawlerLog c")
     List<String> findDistinctUf();
 
     @Query("SELECT DISTINCT c.cityName FROM CrawlerLog c WHERE c.ufAbrev = :ufAbrev")
     List<String> findCitiesByUf(@Param("ufAbrev") String ufAbrev);
+
 }
