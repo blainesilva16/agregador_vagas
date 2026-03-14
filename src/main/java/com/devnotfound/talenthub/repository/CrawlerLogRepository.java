@@ -9,13 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-<<<<<<< HEAD
-public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer> {
-}
-=======
 import java.util.List;
 
-//JpaSpecificationExecutor habilita findAll(Specification<T> spec, Pageable pageable)
 @Repository
 public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
         , JpaSpecificationExecutor<CrawlerLog> {
@@ -23,8 +18,6 @@ public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
     boolean existsByPositionId(Integer id);
 
     Page<CrawlerLog> findByPositionId(Integer id, Pageable pageable);
-
-    //Page<CrawlerLog> findByTechId(Integer id, Pageable pageable);
 
     @Query("SELECT DISTINCT c.plataform FROM CrawlerLog c")
     List<String> findDistinctPlataforms();
@@ -38,4 +31,3 @@ public interface CrawlerLogRepository extends JpaRepository<CrawlerLog, Integer>
     List<String> findCitiesByUf(@Param("ufAbrev") String ufAbrev);
 
 }
->>>>>>> main
