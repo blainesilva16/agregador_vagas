@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "customers")
 @Data
-
 @NoArgsConstructor
 public class Customer {
 
@@ -28,10 +27,10 @@ public class Customer {
     private String password;
 
     @Lob
-    @Column(name = "photo")
+    @Column(name = "photo", columnDefinition = "LONGBLOB")
     private byte[] photo;
 
-    @Column(name = "birthdate")
+    @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
     @CreationTimestamp

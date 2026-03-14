@@ -5,7 +5,6 @@ import com.devnotfound.talenthub.dto.CustomerRequestDTO;
 import com.devnotfound.talenthub.dto.CustomerResponseDTO;
 import com.devnotfound.talenthub.dto.CustomerUpdateDTO;
 import com.devnotfound.talenthub.entity.Customer;
-import com.devnotfound.talenthub.entity.User;
 import com.devnotfound.talenthub.exception.DuplicateEmailException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.CustomerMapper;

@@ -12,6 +12,7 @@ public final class CustomerMapper {
         Customer customers = new Customer();
         customers.setName(crDto.name());
         customers.setEmail(crDto.email());
+        customers.setBirthdate(crDto.birthdate());
         return customers;
     }
 
@@ -19,7 +20,8 @@ public final class CustomerMapper {
         return new CustomerResponseDTO(
                 customers.getId(),
                 customers.getName(),
-                customers.getEmail()
+                customers.getEmail(),
+                customers.getBirthdate()
         );
     }
 }
