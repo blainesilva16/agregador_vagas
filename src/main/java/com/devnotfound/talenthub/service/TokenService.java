@@ -17,12 +17,12 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class TokenService {
 
-    @Value("${app.jwt.secret}")
-    private String secret;
-
-    /** expiration in minutes */
+	 /** expiration in minutes */
     @Value("${app.jwt.expiration}")
     private long expiration;
+    
+	@Value("${app.jwt.secret}")
+    private String secret;
 
     @Value("${app.jwt.issuer}")
     private String issuer;

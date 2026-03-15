@@ -5,7 +5,6 @@ import com.devnotfound.talenthub.dto.CustomerRequestDTO;
 import com.devnotfound.talenthub.dto.CustomerResponseDTO;
 import com.devnotfound.talenthub.dto.CustomerUpdateDTO;
 import com.devnotfound.talenthub.entity.Customer;
-import com.devnotfound.talenthub.entity.User;
 import com.devnotfound.talenthub.exception.DuplicateEmailException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.CustomerMapper;
@@ -116,18 +115,21 @@ public class CustomerService {
 
         return newPassword;
     }
-    
+     
+    private static final long MAX_PHOTO_SIZE = 2 * 1024 * 1024;
+
     public void uploadPhoto(Integer id, MultipartFile file) throws Exception {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SystemConstants.CUSTOMER_NOT_FOUND_ID + id));
 
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Arquivo da foto é obrigatório.");
+        if (file.getSize() > MAX_PHOTO_SIZE) {
+            throw new IllegalArgumentException("A foto deve ter no máximo 2MB.");
         }
 
         String contentType = file.getContentType();
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw new IllegalArgumentException("O arquivo enviado deve ser uma imagem.");
+
+        if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+            throw new IllegalArgumentException("Apenas imagens JPG ou PNG são permitidas.");
         }
 
         customer.setPhoto(file.getBytes());
