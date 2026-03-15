@@ -20,6 +20,5 @@ public record CustomerRequestDTO(
 	    @Size(min = 6, max = 100, message = "Senha deve ter entre 6 e 100 caracteres")
 	    String password,
 	    
-	    @NotBlank(message = "Data de nascimento é obrigatória")
 	    LocalDate birthdate
 	) {}

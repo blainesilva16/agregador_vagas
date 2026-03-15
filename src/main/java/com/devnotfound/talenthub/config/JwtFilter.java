@@ -31,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // rotas públicas
-        if (path.equals("/api/login")
+        if (path.equals("/auth/login")
         		 || (path.equals("/api/customer") && "POST".equalsIgnoreCase(method))
                  || (path.equals("/api/customer/reset-password") && "PATCH".equalsIgnoreCase(method))
                  || path.startsWith("/swagger-ui")

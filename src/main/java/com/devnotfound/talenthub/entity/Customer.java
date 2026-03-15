@@ -27,10 +27,10 @@ public class Customer {
     private String password;
 
     @Lob
-    @Column(name = "photo", columnDefinition = "LONGBLOB")
+    @Column(name = "photo", columnDefinition = "MEDIUMBLOB")
     private byte[] photo;
 
-    @Column(name = "birthdate", nullable = false)
+    @Column(name = "birthdate")
     private LocalDate birthdate;
 
     @CreationTimestamp
