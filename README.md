@@ -29,6 +29,8 @@ O grupo foi dividido em frontend, backend, devops, dbas e analistas de qualidade
 Da parte de java, os desenvolvedores envolvidos são:
 
     - Ricardo Saraiva
+        github: [ricsant](https://github.com/ricsant)
+        linkedin: [ricardo-saraiva](https://www.linkedin.com/in/ricardo-saraiva-5b178633/)
     - Roberta
     - Sandra
     - Guilherme Leal
@@ -37,28 +39,22 @@ Da parte de java, os desenvolvedores envolvidos são:
 Da parte de python, os desenvolvedores envolvidos são:
 
     - Blaine
-    - Carlos Henrique
-    - Henrique
 
 Da parte de banco de dados, os envolvidos são:
 
-    - Karla
+    - Karla 
+        github: [rovigattik-sys](https://github.com/rovigattik-sys)
+        linkedin: [karla-rovigatti](https://www.linkedin.com/in/karla-rovigatti-8a16a840)
     - Cibele
     - Matheus
 
 Da parte do front, os envolvidos são: 
 
     - Eric
-    - José Carlos
-    - Beatriz
-    - Bruno
-    - Angelo
 
 Da parte da esteira ci/cd para o AWS, os envolvidos são:
 
     - Marcelly
-    - Bianca
-    - Isadora
 
 Da parte dos analistas de qualidade, os envolvidos são:
 

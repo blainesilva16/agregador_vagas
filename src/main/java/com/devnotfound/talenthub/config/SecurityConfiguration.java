@@ -52,7 +52,8 @@ public class SecurityConfiguration {
                     .requestMatchers(HttpMethod.GET, "/jobs/states").permitAll()
                     .requestMatchers(HttpMethod.GET, "/jobs/cities").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
-                    .anyRequest().authenticated() 
+                    .requestMatchers(HttpMethod.PATCH, "/api/user/reset-password").permitAll()
+                    .anyRequest().authenticated()
             )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

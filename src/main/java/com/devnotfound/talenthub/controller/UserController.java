@@ -1,8 +1,10 @@
 package com.devnotfound.talenthub.controller;
 
+import com.devnotfound.talenthub.dto.ResetPasswordRequestDTO;
 import com.devnotfound.talenthub.dto.UserRequestDTO;
 import com.devnotfound.talenthub.dto.UserResponseDTO;
 import com.devnotfound.talenthub.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,9 +61,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{email}/resetpass")
-    public ResponseEntity<String> resetPassword(@PathVariable String email) {
-        String newPassword = userService.resetPassword(email);
+    @PatchMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid ResetPasswordRequestDTO dto) {
+        String newPassword = userService.resetPassword(dto.email());
         return ResponseEntity.ok(newPassword);
     }
 }
