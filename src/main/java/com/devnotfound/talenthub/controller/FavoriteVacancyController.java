@@ -2,6 +2,7 @@ package com.devnotfound.talenthub.controller;
 
 import com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO;
 import com.devnotfound.talenthub.dto.FavoriteVacancyStatusResponseDTO;
+import com.devnotfound.talenthub.service.FavoriteVacancyReportService;
 import com.devnotfound.talenthub.service.FavoriteVacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,8 +15,10 @@ import java.util.List;
 @RequestMapping("/api/favorite")
 @RequiredArgsConstructor
 public class FavoriteVacancyController {
+	
 
     private final FavoriteVacancyService favoriteVacancyService;
+    private final FavoriteVacancyReportService favoriteVacancyReportService;
 
     @PostMapping("/{crawlerId}")
     public ResponseEntity<Void> favorite(@PathVariable Integer crawlerId) {
@@ -37,5 +40,17 @@ public class FavoriteVacancyController {
     @GetMapping("/{crawlerId}/status")
     public ResponseEntity<FavoriteVacancyStatusResponseDTO> getFavoriteStatus(@PathVariable Integer crawlerId) {
         return ResponseEntity.ok(favoriteVacancyService.getFavoriteStatus(crawlerId));
+    }
+
+    @GetMapping("/report")
+    public ResponseEntity<byte[]> downloadFavoritesReport() {
+        byte[] pdf = favoriteVacancyReportService.generatePdf();
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=favorite-vacancies.pdf")
+                .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                .contentLength(pdf.length)
+                .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 }

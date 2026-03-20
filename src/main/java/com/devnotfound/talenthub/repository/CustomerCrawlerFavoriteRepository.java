@@ -11,17 +11,24 @@ import java.util.List;
 public interface CustomerCrawlerFavoriteRepository
         extends JpaRepository<CustomerCrawlerFavorite, CustomerCrawlerFavoriteId> {
 
-    boolean existsByCustomerIdAndCrawlerLogId(Integer customerId, Integer crawlerLogId);
+    boolean existsByCustomer_IdAndCrawlerLog_Id(Integer customerId, Integer crawlerLogId);
 
-    void deleteByCustomerIdAndCrawlerLogId(Integer customerId, Integer crawlerLogId);
+    void deleteByCustomer_IdAndCrawlerLog_Id(Integer customerId, Integer crawlerLogId);
 
     @Query("""
             SELECT new com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO(
                 f.crawlerLog.id,
                 f.crawlerLog.title,
                 f.crawlerLog.companyName,
-                f.crawlerLog.postingLink,
-                f.creationDate
+                f.crawlerLog.cityName,
+                f.crawlerLog.ufAbrev,
+                f.crawlerLog.techLevel,
+                f.crawlerLog.hiringType,
+                	CASE WHEN f.crawlerLog.workMode IS NOT NULL THEN CAST(f.crawlerLog.workMode as string) ELSE NULL END,
+                		f.crawlerLog.plataform,
+                		f.crawlerLog.salaryRange,
+                		f.crawlerLog.postingLink,
+                		f.creationDate
             )
             FROM CustomerCrawlerFavorite f
             WHERE f.customer.id = :customerId
