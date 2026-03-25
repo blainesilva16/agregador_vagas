@@ -27,11 +27,12 @@ public class FavoriteVacancyReportService {
 
         List<FavoriteVacancyReportItemDTO> items = favorites.stream()
                 .map(f -> new FavoriteVacancyReportItemDTO(
-                        f.crawlerId(),
-                        f.title(),
-                        f.companyName(),
-                        f.postingLink(),
-                        f.creationDate()
+                    f.title(),
+                    f.companyName(),
+                    f.ufAbrev(),
+                    f.hiringType(),
+                    f.workMode(),
+                    f.salaryRange()
                 ))
                 .toList();
 

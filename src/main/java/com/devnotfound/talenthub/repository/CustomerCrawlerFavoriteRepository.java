@@ -24,11 +24,11 @@ public interface CustomerCrawlerFavoriteRepository
                 f.crawlerLog.ufAbrev,
                 f.crawlerLog.techLevel,
                 f.crawlerLog.hiringType,
-                	CASE WHEN f.crawlerLog.workMode IS NOT NULL THEN CAST(f.crawlerLog.workMode as string) ELSE NULL END,
-                		f.crawlerLog.plataform,
-                		f.crawlerLog.salaryRange,
-                		f.crawlerLog.postingLink,
-                		f.creationDate
+                f.crawlerLog.workMode,
+                f.crawlerLog.plataform,
+                f.crawlerLog.salaryRange,
+                f.crawlerLog.postingLink,
+                f.creationDate
             )
             FROM CustomerCrawlerFavorite f
             WHERE f.customer.id = :customerId

@@ -1,21 +1,15 @@
 package com.devnotfound.talenthub.dto;
 
-//import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+// import java.time.LocalDateTime;
 
-//import com.devnotfound.talenthub.entity.enums.WorkMode;
+import com.devnotfound.talenthub.entity.enums.WorkMode;
 
 public record FavoriteVacancyReportItemDTO(
-        Integer crawlerId,
         String title,
         String companyName,
-//        String cityName,
-//        String ufAbrev,
-//        String techLevel,
-//        String hiringType,
-//        WorkMode workMode,
-//        String plataform,
-//        BigDecimal salaryRange,
-        String postingLink,
-        LocalDateTime favoritedAt
+        String ufAbrev,
+        String hiringType,
+        WorkMode workMode,
+        BigDecimal salaryRange
 ) {}

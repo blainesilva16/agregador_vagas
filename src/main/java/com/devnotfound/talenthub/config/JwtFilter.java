@@ -69,16 +69,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(email, null, authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                
-                System.out.println("SECURITY CONTEXT: " + SecurityContextHolder.getContext().getAuthentication());
-                System.out.println("PATH: " + path);
-                System.out.println("AUTH HEADER: " + authorizationHeader);
-                System.out.println("EMAIL TOKEN: " + email);
-                System.out.println("ROLE TOKEN: " + role);
-                System.out.println("AUTHORITY GERADA: ROLE_" + role);
-                System.out.println("AUTH OBJ: " + auth);
-
+                SecurityContextHolder.getContext().setAuthentication(auth);     
+        
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token inválido!"); 

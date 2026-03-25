@@ -3,6 +3,8 @@ package com.devnotfound.talenthub.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.devnotfound.talenthub.entity.enums.WorkMode;
+
 public record FavoriteVacancyResponseDTO(
         Integer crawlerId,
         String title,
@@ -11,9 +13,9 @@ public record FavoriteVacancyResponseDTO(
         String ufAbrev,
         String techLevel,
         String hiringType,
-        String workMode,
+        WorkMode workMode,
         String plataform,
         BigDecimal salaryRange,
         String postingLink,
-        LocalDateTime creationDate
+        LocalDateTime creationDate        
 ) {}
