@@ -46,12 +46,16 @@ Da parte de banco de dados, os envolvidos são:
         github: [rovigattik-sys](https://github.com/rovigattik-sys)
         linkedin: [karla-rovigatti](https://www.linkedin.com/in/karla-rovigatti-8a16a840)
     - Cibele
+        github: [cibeleoliveira420](https://github.com/cibeleoliveira420)
+        linkedin: [cibele-oliveira](https://www.linkedin.com/in/cibele-oliveira-361008354)
     - Matheus
 
 Da parte do front, os envolvidos são: 
 
     - Eric
-
+    - Guilherme Leal
+    - Nathan
+    
 Da parte da esteira ci/cd para o AWS, os envolvidos são:
 
     - Marcelly
