@@ -21,6 +21,7 @@ public class PositionService {
 
     private final PositionRepository positionRepository;
     private final CrawlerLogRepository crawlerLogRepository;
+    private final LogSearchService logSearchService;
 
     public PositionResponseDTO findById(Integer id) {
         Position position = positionRepository.findById(id)
@@ -41,6 +42,8 @@ public class PositionService {
         if (positions.isEmpty()) {
             throw new ResourceNotFoundException(SystemConstants.POSITION_NOT_FOUND_NAME + name);
         }
+
+        this.logSearchService.setLogSearch(name);
         return positions;
     }
 
