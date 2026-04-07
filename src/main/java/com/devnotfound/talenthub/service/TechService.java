@@ -8,6 +8,7 @@ import com.devnotfound.talenthub.exception.DuplicateNameException;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.mapper.TechMapper;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
+import com.devnotfound.talenthub.repository.LogSearchRepository;
 import com.devnotfound.talenthub.repository.TechRepository;
 import com.devnotfound.talenthub.exception.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,14 @@ public class TechService {
     private final CrawlerLogRepository crawlerLogRepository;
     private final TechMapper techMapper;
 
+    private LogSearchService logSearchService;
 
-    public TechService(TechRepository techRepository, TechMapper techMapper, CrawlerLogRepository crawlerLogRepository) {
+
+    public TechService(TechRepository techRepository, TechMapper techMapper, CrawlerLogRepository crawlerLogRepository, LogSearchService logSearchService) {
         this.techRepository = techRepository;
         this.techMapper = techMapper;
         this.crawlerLogRepository = crawlerLogRepository;
+        this. logSearchService = logSearchService;
     }
 
     public List<TechResponseDTO> listAll() {
@@ -44,6 +48,9 @@ public class TechService {
     }
 
     public List<TechResponseDTO> findByName(String name) {
+
+        this.logSearchService.setLogSearch(name);
+
         return techRepository.findByNameContainingIgnoreCase(name).stream()
                 .map(techMapper::toResponseDTO)
                 .collect(Collectors.toList());
