@@ -6,12 +6,15 @@ import com.devnotfound.talenthub.entity.CrawlerLog;
 import com.devnotfound.talenthub.entity.Customer;
 import com.devnotfound.talenthub.entity.CustomerCrawlerFavorite;
 import com.devnotfound.talenthub.entity.CustomerCrawlerFavoriteId;
+import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.repository.CustomerCrawlerFavoriteRepository;
+import com.devnotfound.talenthub.specification.CustomerCrawlerFavoriteSpecification;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +60,18 @@ public class FavoriteVacancyService {
     }
 
     @Transactional(readOnly = true)
+    public List<FavoriteVacancyResponseDTO> listFavorites(CrawlerLogFilterDTO filterDTO) {
+        Customer customer = authenticatedCustomerService.getLoggedCustomer();
+
+        return customerCrawlerFavoriteRepository.findAll(
+                        CustomerCrawlerFavoriteSpecification.filter(customer.getId(), filterDTO),
+                        Sort.by(Sort.Direction.DESC, "creationDate")
+                ).stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public FavoriteVacancyStatusResponseDTO getFavoriteStatus(Integer crawlerId) {
         Customer customer = authenticatedCustomerService.getLoggedCustomer();
 
@@ -64,5 +79,24 @@ public class FavoriteVacancyService {
                 .existsByCustomer_IdAndCrawlerLog_Id(customer.getId(), crawlerId);
 
         return new FavoriteVacancyStatusResponseDTO(crawlerId, favorite);
+    }
+
+    private FavoriteVacancyResponseDTO toResponseDTO(CustomerCrawlerFavorite favorite) {
+        CrawlerLog crawlerLog = favorite.getCrawlerLog();
+
+        return new FavoriteVacancyResponseDTO(
+                crawlerLog.getId(),
+                crawlerLog.getTitle(),
+                crawlerLog.getCompanyName(),
+                crawlerLog.getCityName(),
+                crawlerLog.getUfAbrev(),
+                crawlerLog.getTechLevel(),
+                crawlerLog.getHiringType(),
+                crawlerLog.getWorkMode(),
+                crawlerLog.getPlataform(),
+                crawlerLog.getSalaryRange(),
+                crawlerLog.getPostingLink(),
+                favorite.getCreationDate()
+        );
     }
 }
