@@ -3,7 +3,11 @@ package com.devnotfound.talenthub.repository;
 import com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO;
 import com.devnotfound.talenthub.entity.CustomerCrawlerFavorite;
 import com.devnotfound.talenthub.entity.CustomerCrawlerFavoriteId;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -11,17 +15,28 @@ import java.util.List;
 
 @Repository
 public interface CustomerCrawlerFavoriteRepository
-        extends JpaRepository<CustomerCrawlerFavorite, CustomerCrawlerFavoriteId> {
+        extends JpaRepository<CustomerCrawlerFavorite, CustomerCrawlerFavoriteId>,
+        JpaSpecificationExecutor<CustomerCrawlerFavorite> {
 
-    boolean existsByCustomerIdAndCrawlerLogId(Integer customerId, Integer crawlerLogId);
+    boolean existsByCustomer_IdAndCrawlerLog_Id(Integer customerId, Integer crawlerLogId);
 
-    void deleteByCustomerIdAndCrawlerLogId(Integer customerId, Integer crawlerLogId);
+    void deleteByCustomer_IdAndCrawlerLog_Id(Integer customerId, Integer crawlerLogId);
+
+    @EntityGraph(attributePaths = "crawlerLog")
+    List<CustomerCrawlerFavorite> findAll(Specification<CustomerCrawlerFavorite> spec, Sort sort);
 
     @Query("""
             SELECT new com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO(
                 f.crawlerLog.id,
                 f.crawlerLog.title,
                 f.crawlerLog.companyName,
+                f.crawlerLog.cityName,
+                f.crawlerLog.ufAbrev,
+                f.crawlerLog.techLevel,
+                f.crawlerLog.hiringType,
+                f.crawlerLog.workMode,
+                f.crawlerLog.plataform,
+                f.crawlerLog.salaryRange,
                 f.crawlerLog.postingLink,
                 f.creationDate
             )

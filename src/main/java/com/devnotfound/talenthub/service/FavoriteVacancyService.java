@@ -6,14 +6,15 @@ import com.devnotfound.talenthub.entity.CrawlerLog;
 import com.devnotfound.talenthub.entity.Customer;
 import com.devnotfound.talenthub.entity.CustomerCrawlerFavorite;
 import com.devnotfound.talenthub.entity.CustomerCrawlerFavoriteId;
+import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
 import com.devnotfound.talenthub.exception.ResourceNotFoundException;
 import com.devnotfound.talenthub.repository.CrawlerLogRepository;
 import com.devnotfound.talenthub.repository.CustomerCrawlerFavoriteRepository;
-import com.devnotfound.talenthub.repository.CustomerRepository;
+import com.devnotfound.talenthub.specification.CustomerCrawlerFavoriteSpecification;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +24,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteVacancyService {
 
-    private final CustomerRepository customerRepository;
+    private final AuthenticatedCustomerService authenticatedCustomerService;
     private final CrawlerLogRepository crawlerLogRepository;
     private final CustomerCrawlerFavoriteRepository customerCrawlerFavoriteRepository;
 
     @Transactional
     public void favorite(Integer crawlerId) {
-        Customer customer = getLoggedCustomer();
+        Customer customer = authenticatedCustomerService.getLoggedCustomer();
 
-        if (customerCrawlerFavoriteRepository.existsByCustomerIdAndCrawlerLogId(customer.getId(), crawlerId)) {
+        if (customerCrawlerFavoriteRepository.existsByCustomer_IdAndCrawlerLog_Id(customer.getId(), crawlerId)) {
             return;
         }
 
@@ -48,37 +49,54 @@ public class FavoriteVacancyService {
 
     @Transactional
     public void unfavorite(Integer crawlerId) {
-        Customer customer = getLoggedCustomer();
-        customerCrawlerFavoriteRepository.deleteByCustomerIdAndCrawlerLogId(customer.getId(), crawlerId);
+        Customer customer = authenticatedCustomerService.getLoggedCustomer();
+        customerCrawlerFavoriteRepository.deleteByCustomer_IdAndCrawlerLog_Id(customer.getId(), crawlerId);
     }
 
     @Transactional(readOnly = true)
     public List<FavoriteVacancyResponseDTO> listFavorites() {
-        Customer customer = getLoggedCustomer();
+        Customer customer = authenticatedCustomerService.getLoggedCustomer();
         return customerCrawlerFavoriteRepository.findFavoriteVacanciesByCustomerId(customer.getId());
     }
 
     @Transactional(readOnly = true)
+    public List<FavoriteVacancyResponseDTO> listFavorites(CrawlerLogFilterDTO filterDTO) {
+        Customer customer = authenticatedCustomerService.getLoggedCustomer();
+
+        return customerCrawlerFavoriteRepository.findAll(
+                        CustomerCrawlerFavoriteSpecification.filter(customer.getId(), filterDTO),
+                        Sort.by(Sort.Direction.DESC, "creationDate")
+                ).stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public FavoriteVacancyStatusResponseDTO getFavoriteStatus(Integer crawlerId) {
-        Customer customer = getLoggedCustomer();
+        Customer customer = authenticatedCustomerService.getLoggedCustomer();
 
         boolean favorite = customerCrawlerFavoriteRepository
-                .existsByCustomerIdAndCrawlerLogId(customer.getId(), crawlerId);
+                .existsByCustomer_IdAndCrawlerLog_Id(customer.getId(), crawlerId);
 
         return new FavoriteVacancyStatusResponseDTO(crawlerId, favorite);
     }
 
-    private Customer getLoggedCustomer() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    private FavoriteVacancyResponseDTO toResponseDTO(CustomerCrawlerFavorite favorite) {
+        CrawlerLog crawlerLog = favorite.getCrawlerLog();
 
-        if (authentication == null || !authentication.isAuthenticated()
-                || "anonymousUser".equals(authentication.getName())) {
-            throw new BadCredentialsException("Customer não autenticado.");
-        }
-
-        String email = authentication.getName();
-
-        return customerRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer logado não encontrado: " + email));
+        return new FavoriteVacancyResponseDTO(
+                crawlerLog.getId(),
+                crawlerLog.getTitle(),
+                crawlerLog.getCompanyName(),
+                crawlerLog.getCityName(),
+                crawlerLog.getUfAbrev(),
+                crawlerLog.getTechLevel(),
+                crawlerLog.getHiringType(),
+                crawlerLog.getWorkMode(),
+                crawlerLog.getPlataform(),
+                crawlerLog.getSalaryRange(),
+                crawlerLog.getPostingLink(),
+                favorite.getCreationDate()
+        );
     }
 }

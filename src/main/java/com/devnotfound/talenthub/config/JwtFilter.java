@@ -56,6 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 DecodedJWT jwt = tokenService.verifyToken(token);
 
                 String email = jwt.getSubject();
+                
                 String role = jwt.getClaim("role").asString();
                 
                 if (role == null || role.isBlank()) {
@@ -63,14 +64,13 @@ public class JwtFilter extends OncePerRequestFilter {
                     response.getWriter().write("Token sem role");
                     return;
                 }
-
                 var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(email, null, authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
-
+                SecurityContextHolder.getContext().setAuthentication(auth);     
+        
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token inválido!"); 

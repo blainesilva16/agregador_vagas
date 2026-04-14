@@ -28,13 +28,16 @@ O grupo foi dividido em frontend, backend, devops, dbas e analistas de qualidade
 
 Da parte de java, os desenvolvedores envolvidos são:
 
-    - Ricardo Saraiva
-        github: [ricsant](https://github.com/ricsant)
-        linkedin: [ricardo-saraiva](https://www.linkedin.com/in/ricardo-saraiva-5b178633/)
-    - Roberta
-    - Sandra
-    - Guilherme Leal
-    - Nathan
+
+> #### Ricardo Saraiva
+> github: [ricsant](https://github.com/ricsant)
+> linkedin: [ricardo-saraiva](https://www.linkedin.com/in/ricardo-saraiva-5b178633/)
+> #### Roberta
+> #### Guilherme Leal
+> #### Nathan
+> #### Sandra Eimert - Analista de Sistemas
+> [![LinkedIn](https://img.shields.io/badge/LinkedIn%20-%20Sandra%20Eimert-0f172a?style=for-the-badge&logo=linkedin&logoColor=white&labelColor=0077B5&cacheSeconds=1)](https://www.linkedin.com/in/sandra-eimert/)
+> [![Github](https://img.shields.io/badge/Github%20-%20Sandra%20Eimert-0f172a?style=for-the-badge&logo=github&logoColor=white&labelColor=5700B5&cacheSeconds=1)](https://github.com/sandrahelena)
 
 Da parte de python, os desenvolvedores envolvidos são:
 
