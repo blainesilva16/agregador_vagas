@@ -1,19 +1,18 @@
 package com.devnotfound.talenthub.controller;
 
+import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
 import com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO;
 import com.devnotfound.talenthub.dto.FavoriteVacancyStatusResponseDTO;
-import com.devnotfound.talenthub.entity.enums.WorkMode;
 import com.devnotfound.talenthub.service.FavoriteVacancyReportService;
 import com.devnotfound.talenthub.service.FavoriteVacancyService;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,8 +36,8 @@ public class FavoriteVacancyController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FavoriteVacancyResponseDTO>> listFavorites() {
-        return ResponseEntity.ok(favoriteVacancyService.listFavorites());
+    public ResponseEntity<List<FavoriteVacancyResponseDTO>> listFavorites(@ParameterObject CrawlerLogFilterDTO filterDTO) {
+        return ResponseEntity.ok(favoriteVacancyService.listFavorites(filterDTO));
     }
 
     @GetMapping("/{crawlerId}/status")
@@ -47,14 +46,8 @@ public class FavoriteVacancyController {
     }
 
     @GetMapping("/report")
-    public ResponseEntity<byte[]> downloadFavoritesReport(
-        // @RequestParam(required = true) WorkMode workMode,
-        // @RequestParam(required = false)
-        // @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-        // @RequestParam(required = false)
-        // @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-    ) {
-        byte[] pdf = favoriteVacancyReportService.generatePdf();
+    public ResponseEntity<byte[]> downloadFavoritesReport(@ParameterObject CrawlerLogFilterDTO filterDTO) {
+        byte[] pdf = favoriteVacancyReportService.generatePdf(filterDTO);
 
         return ResponseEntity.ok()
             .header("Content-Disposition", "attachment; filename=favorite-vacancies.pdf")

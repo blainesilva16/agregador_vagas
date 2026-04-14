@@ -1,5 +1,6 @@
 package com.devnotfound.talenthub.service;
 
+import com.devnotfound.talenthub.dto.CrawlerLogFilterDTO;
 import com.devnotfound.talenthub.dto.FavoriteVacancyReportDTO;
 import com.devnotfound.talenthub.dto.FavoriteVacancyReportItemDTO;
 import com.devnotfound.talenthub.dto.FavoriteVacancyResponseDTO;
@@ -21,9 +22,9 @@ public class FavoriteVacancyReportService {
     private final PdfGenerator<FavoriteVacancyReportDTO> favoriteVacancyPdfGenerator;
 
     @Transactional(readOnly = true)
-    public byte[] generatePdf() {
+    public byte[] generatePdf(CrawlerLogFilterDTO filterDTO) {
         Customer customer = authenticatedCustomerService.getLoggedCustomer();
-        List<FavoriteVacancyResponseDTO> favorites = favoriteVacancyService.listFavorites();
+        List<FavoriteVacancyResponseDTO> favorites = favoriteVacancyService.listFavorites(filterDTO);
 
         List<FavoriteVacancyReportItemDTO> items = favorites.stream()
                 .map(f -> new FavoriteVacancyReportItemDTO(
