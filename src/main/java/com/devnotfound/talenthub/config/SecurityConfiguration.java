@@ -47,12 +47,16 @@ public class SecurityConfiguration {
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/customer").permitAll()
                     .requestMatchers(HttpMethod.PATCH, "/api/customer/reset-password").permitAll()
-                    .requestMatchers("/api/favorites/**").hasRole("CUSTOMER")
+                    .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                    .requestMatchers(HttpMethod.PATCH, "/api/user/reset-password").permitAll()
+                    .requestMatchers("/api/favorite", "/api/favorite/**").hasRole("CUSTOMER")
+                    .requestMatchers("/api/customer", "/api/customer/**").hasRole("CUSTOMER")
+                    .requestMatchers("/api/user", "/api/user/**").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/jobs/public").permitAll()
                     .requestMatchers(HttpMethod.GET, "/jobs/states").permitAll()
                     .requestMatchers(HttpMethod.GET, "/jobs/cities").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
-                    .requestMatchers(HttpMethod.PATCH, "/api/user/reset-password").permitAll()
+                    
+                    
                     .anyRequest().authenticated()
             )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
