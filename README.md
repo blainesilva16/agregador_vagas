@@ -41,26 +41,29 @@ Da parte de java, os desenvolvedores envolvidos são:
 
 Da parte de python, os desenvolvedores envolvidos são:
 
-> #### Blaine
+    - Blaine
 
 Da parte de banco de dados, os envolvidos são:
 
-> #### Karla 
-> github: [rovigattik-sys](https://github.com/rovigattik-sys)
-> linkedin: [karla-rovigatti](https://www.linkedin.com/in/karla-rovigatti-8a16a840)
-> #### Cibele
-> #### Matheus
+    - Karla 
+        github: [rovigattik-sys](https://github.com/rovigattik-sys)
+        linkedin: [karla-rovigatti](https://www.linkedin.com/in/karla-rovigatti-8a16a840)
+    - Cibele
+        github: [cibeleoliveira420](https://github.com/cibeleoliveira420)
+        linkedin: [cibele-oliveira](https://www.linkedin.com/in/cibele-oliveira-361008354)
+    - Matheus
 
 Da parte do front, os envolvidos são: 
 
-> #### Eric
-
+    - Eric
+    - Guilherme Leal
+    - Nathan
+    
 Da parte da esteira ci/cd para o AWS, os envolvidos são:
 
-> #### Marcelly
+    - Marcelly
 
 Da parte dos analistas de qualidade, os envolvidos são:
 
-> #### Luzinete
-> #### Kelly
-
+    - Luzinete
+    - Kelly
